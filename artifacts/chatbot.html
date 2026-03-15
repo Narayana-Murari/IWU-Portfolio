@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freight Planner Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #0071dc 0%, #0056b3 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-title svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .quick-actions {
+            flex: 1;
+        }
+
+        .quick-actions-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(4px);
+        }
+
+        .sidebar-footer {
+            font-size: 11px;
+            opacity: 0.7;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        /* Header */
+        .chat-header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-content h1 {
+            font-size: 20px;
+            color: #0071dc;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+        }
+
+        /* Messages Area */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .messages::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 60%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message.bot .message-content {
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 12px 12px 12px 4px;
+        }
+
+        .message.user .message-content {
+            background: #0071dc;
+            color: white;
+            border-radius: 12px 12px 4px 12px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+            align-self: flex-end;
+            margin-top: 4px;
+        }
+
+        .message.user .message-time {
+            text-align: right;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Quick Reply Chips */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            background: #e8f0fe;
+            border: 1px solid #0071dc;
+            border-radius: 20px;
+            color: #0071dc;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .chip:hover {
+            background: #0071dc;
+            color: white;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 20px 30px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #0071dc;
+            box-shadow: 0 0 0 3px rgba(0, 113, 220, 0.1);
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #0071dc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Footer */
+        .chat-footer {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            padding: 10px 20px;
+            border-top: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .quick-actions-label,
+            .sidebar-title span,
+            .sidebar-footer {
+                display: none;
+            }
+
+            .action-btn {
+                padding: 12px;
+                font-size: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .messages {
+                padding: 20px;
+            }
+
+            .input-area {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="3" width="15" height="13"></rect>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                    <circle cx="13.5" cy="18.5" r="2.5"></circle>
+                </svg>
+                <span>Freight Planner</span>
+            </div>
+
+            <div class="quick-actions">
+                <div class="quick-actions-label">Quick Actions</div>
+                <button class="action-btn" onclick="sendQuery('What freight is arriving today?')">📦 Check Today's Freight</button>
+                <button class="action-btn" onclick="sendQuery('What are the stocking priorities?')">⚡ Stocking Priorities</button>
+                <button class="action-btn" onclick="sendQuery('Show me the delivery schedule')">📅 Delivery Schedule</button>
+                <button class="action-btn" onclick="sendQuery('What are the team assignments?')">👥 Team Assignments</button>
+                <button class="action-btn" onclick="sendQuery('Are there any low stock alerts?')">⚠️ Inventory Alerts</button>
+            </div>
+
+            <div class="sidebar-footer">
+                Last updated: 2:30 PM
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="header-content">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071dc" stroke-width="2">
+                        <path d="M12 2L2 7V12C2 16.5 5.5 20.5 12 22C18.5 20.5 22 16.5 22 12V7L12 2Z"></path>
+                    </svg>
+                    <h1>Freight Planner Assistant</h1>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages" id="messages">
+                <div class="message bot">
+                    <div>
+                        <div class="message-content">
+                            👋 Welcome to the Freight Planner Assistant! I'm here to help you manage incoming freight, stocking priorities, delivery schedules, team assignments, and inventory alerts. Try asking me about today's freight, stocking priorities, delivery status, or team assignments. How can I assist you today?
+                        </div>
+                        <div class="message-time">2:15 PM</div>
+                        <div class="quick-replies">
+                            <button class="chip" onclick="sendQuery('What freight is arriving today?')">Today's Freight</button>
+                            <button class="chip" onclick="sendQuery('What are the stocking priorities?')">Priorities</button>
+                            <button class="chip" onclick="sendQuery('What are the team assignments?')">Team Assignments</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        class="input-field"
+                        id="messageInput"
+                        placeholder="Ask me about freight, stocking, or team assignments..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button class="send-btn" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 L4.13399899,1.16151496 C3.34915502,0.9 2.40734225,0.9 1.77946707,1.4288337 C0.994623095,2.06390969 0.837654326,3.0065137 1.15159189,3.98991799 L3.03521743,10.4309109 C3.03521743,10.5880083 3.19218622,10.7451057 3.50612381,10.7451057 L16.6915026,11.5305926 C16.6915026,11.5305926 17.1624089,11.5305926 17.1624089,12.0017848 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="chat-footer">
+                Prototype built as part of AI Lab - AIML-500 | Design Thinking Chatbot Project
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Knowledge base for bot responses
+        const responseDatabase = {
+            freight: {
+                keywords: ['freight', 'arriving', 'truck', 'delivery', 'arriving today', "today's freight", 'inbound'],
+                responses: [
+                    "📦 Today's Freight Schedule:\n\n✓ Truck 1 (Grocery) - ETA 6:00 AM - ARRIVED\n⏳ Truck 2 (GM/HBA) - ETA 2:00 PM - IN TRANSIT\n📌 Truck 3 (Frozen/Dairy) - ETA 4:00 PM - SCHEDULED\n\nTotal Pallets Expected: 47\nTotal Cases: 384",
+                    "🚚 Incoming Freight Update:\n\nTruck 1: Grocery items (156 cases) - Successfully unloaded 6:15 AM\nTruck 2: General Merchandise & HBA (128 cases) - Currently 15 minutes out\nTruck 3: Frozen & Dairy (100 cases) - On schedule for afternoon delivery\n\nUnloading bay is currently: AVAILABLE for Truck 2"
+                ]
+            },
+            stocking: {
+                keywords: ['stocking', 'priorities', 'priority', 'what to stock', 'stock first'],
+                responses: [
+                    "⚡ Current Stocking Priorities:\n\n1️⃣ URGENT: Frozen/Dairy (perishable items - stock immediately)\n2️⃣ HIGH: High-velocity grocery endcaps (sales event items)\n3️⃣ STANDARD: GM replenishment for Aisles 2-7 (low on-hand inventory)\n\n🎯 Special Notes:\n- Holiday promotional displays are due by end of shift\n- Backstock space available in Zone A (Grocery) only\n- Temperature-controlled zone is prepped and ready",
+                    "📋 Recommended Stocking Order:\n\nImmediate (Next 30 min):\n• Frozen/Dairy pallets (3 pallets) - expires 3/20\n• Chilled beverage endcap (2 pallets)\n\nBefore 4:00 PM:\n• GM items for main floor (4 pallets)\n• HBA seasonal display (1 pallet)\n\nCan backstock:\n• Dry grocery items (remaining inventory)"
+                ]
+            },
+            delivery: {
+                keywords: ['delivery', 'status', 'tracking', 'when will', 'eta', 'truck', 'where is'],
+                responses: [
+                    "🚛 Delivery Status & Tracking:\n\nTruck 1 (Grocery):\n├─ Status: DELIVERED ✓\n├─ Arrival Time: 6:15 AM\n├─ Pallets: 12\n└─ All items received\n\nTruck 2 (GM/HBA):\n├─ Status: IN TRANSIT 🔄\n├─ Current Location: 2 miles out\n├─ ETA: 2:00 PM (on time)\n├─ Pallets: 8\n└─ Driver: Miguel Rodriguez\n\nTruck 3 (Frozen/Dairy):\n├─ Status: SCHEDULED ⏰\n├─ ETA: 4:00 PM\n├─ Pallets: 7\n└─ Expected Driver: Sarah Chen",
+                    "📍 Truck Tracking Update:\n\nTruck #T2847 (General Merchandise)\n• Current Location: Highway 101, 3 exits away\n• Driver Estimated Arrival: 2:05 PM\n• No delays reported\n• Condition: All systems normal\n\nTruck #T2851 (Frozen/Dairy)\n• Status: Loaded and ready to depart from distribution center\n• Scheduled Pickup: 3:30 PM\n• Estimated Arrival: 4:15 PM\n• Capacity: 7 pallets (100% loaded)"
+                ]
+            },
+            team: {
+                keywords: ['team', 'assignments', 'associates', 'staffing', 'zone', 'crew', 'staff'],
+                responses: [
+                    "👥 Current Shift Assignments (2:30 PM):\n\n📍 Zone A (Grocery):\n├─ Associates: 3 (Marcus, Jennifer, Lee)\n├─ Activity: Stocking Truck 1 items\n└─ Capacity: Available\n\n📍 Zone B (GM/Electronics):\n├─ Associates: 2 (David, Rebecca)\n├─ Activity: Floor maintenance\n└─ Capacity: Can move 1 associate when Truck 2 arrives\n\n📍 Zone C (Frozen/Dairy):\n├─ Associates: 2 (Alex, Sofia)\n├─ Activity: Temperature control checks\n└─ Capacity: Ready for Truck 3\n\n🔄 Unloading Bay:\n├─ Associates: 4 (Full crew)\n├─ Current: Restocking supplies\n└─ Next: Truck 2 unloading\n\n💡 RECOMMENDATION: Move 1 associate from Zone B to unloading when Truck 2 arrives (expected 2:05 PM)",
+                    "📊 Team Deployment Summary:\n\nCurrent Coverage: 11 associates on freight duties\n\nOptimal Assignments:\n• High Priority (Frozen/Dairy): 2 associates ✓\n• Standard (GM/Grocery): 5 associates ✓\n• Unloading: 4 associates ✓\n\nSuggested Action:\nWhen Truck 2 arrives, recommend:\n- Adding 1 associate to unloading (move from Zone B)\n- This reduces Zone B to 1 associate (acceptable for maintenance)\n- Provides 5 unloading capacity for faster processing\n- Estimated unload time: 25 minutes"
+                ]
+            },
+            inventory: {
+                keywords: ['inventory', 'alerts', 'low stock', 'reorder', 'running low', 'stock level'],
+                responses: [
+                    "⚠️ Inventory Alerts - LOW STOCK:\n\n🔴 CRITICAL (< 3 days supply):\n├─ Paper Towels (Aisle 3): 2 cases remaining\n├─ Bottled Water (Aisle 7): 5 cases remaining\n└─ Canned Soup (Aisle 12): Reorder triggered\n\n🟡 LOW (< 5 days supply):\n├─ Dish Soap (Aisle 4): 8 cases\n├─ Toilet Paper (Aisle 3): 12 cases\n└─ Baby Wipes (Aisle 9): 6 cases\n\n✅ Stock Status for Truck 2 (arriving soon):\nPaper Towels +24 cases\nBottled Water +18 cases\n\nAction: Prioritize Truck 2 unloading & restocking of critical items",
+                    "📦 Current Inventory Status:\n\nItems At Risk of Stock-Out:\n1. Paper Towels - 2 cases (EMERGENCY)\n   └─ Truck 2 has 24 cases arriving\n2. Bottled Water - 5 cases (CRITICAL)\n   └─ Truck 2 has 18 cases arriving\n3. Canned Soup - 1 case (REORDER ACTIVE)\n   └─ Expected delivery tomorrow\n\nRecommendation: Execute fast-track restocking for Aisles 3 and 7 immediately after Truck 2 unload"
+                ]
+            }
+        };
+
+        function getMessageTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        function findResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+
+            // Check each category
+            for (let category in responseDatabase) {
+                const category_data = responseDatabase[category];
+                for (let keyword of category_data.keywords) {
+                    if (lowerMessage.includes(keyword)) {
+                        // Return random response from this category
+                        const responses = category_data.responses;
+                        return responses[Math.floor(Math.random() * responses.length)];
+                    }
+                }
+            }
+
+            // Default response
+            return "I understand you're looking for freight information. Try asking me about:\n\n• Today's freight schedule\n• Stocking priorities\n• Delivery status & tracking\n• Team assignments\n• Inventory & low stock alerts\n\nWhat can I help you with?";
+        }
+
+        function displayTypingIndicator() {
+            const messagesDiv = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.className = 'message bot';
+            message.id = 'typing-indicator';
+            message.innerHTML = `
+                <div>
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(message);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function addBotMessage(text) {
+            removeTypingIndicator();
+            const messagesDiv = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.className = 'message bot';
+
+            const time = getMessageTime();
+            message.innerHTML = `
+                <div>
+                    <div class="message-content">${text}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            messagesDiv.appendChild(message);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.className = 'message user';
+
+            const time = getMessageTime();
+            message.innerHTML = `
+                <div>
+                    <div class="message-content">${escapeHtml(text)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            messagesDiv.appendChild(message);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (message === '') return;
+
+            addUserMessage(message);
+            input.value = '';
+
+            // Show typing indicator with delay
+            setTimeout(() => {
+                displayTypingIndicator();
+
+                // Get response and display it
+                setTimeout(() => {
+                    const response = findResponse(message);
+                    addBotMessage(response);
+                }, 800);
+            }, 300);
+        }
+
+        function sendQuery(query) {
+            const input = document.getElementById('messageInput');
+            input.value = query;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Initialize with focus on input
+        document.getElementById('messageInput').focus();
+    </script>
+</body>
+</html>

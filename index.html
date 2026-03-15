@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narayana Murari | AI &amp; Machine Learning Professional Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --accent-mid: #dbeafe;
+            --bg: #ffffff;
+            --bg-alt: #f9fafb;
+            --border: #e5e7eb;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            background: var(--bg);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Mobile nav toggle */
+        .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+        .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--text-primary); margin: 5px 0; transition: 0.3s; }
+
+        /* ── Hero ── */
+        .hero {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 5rem 1.5rem 4rem;
+        }
+        .hero-label {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 580px;
+            line-height: 1.7;
+        }
+
+        /* ── Sections ── */
+        .section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        .section-alt { background: var(--bg-alt); }
+        .section-alt .section { padding-top: 4rem; padding-bottom: 4rem; }
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
+        }
+        .section-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+        }
+
+        /* ── About ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .about-text p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .contact-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+        .contact-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Value Proposition ── */
+        .value-prop-card {
+            background: var(--accent-light);
+            border: 1px solid var(--accent-mid);
+            border-radius: var(--radius);
+            padding: 2rem;
+        }
+        .value-prop-card p { color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .value-prop-card strong { color: var(--text-primary); }
+
+        /* ── Skills ── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+        .skill-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .skill-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+        .skill-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .skill-card p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .skill-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        /* ── Artifacts ── */
+        .artifact {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: box-shadow 0.2s;
+        }
+        .artifact:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .artifact-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .artifact-num {
+            background: var(--accent);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .artifact h3 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.3px; }
+        .artifact .meta {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+        .artifact-body h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            margin-top: 1.25rem;
+            margin-bottom: 0.4rem;
+        }
+        .artifact-body p { color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+        .tag {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.2rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .artifact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: gap 0.2s;
+        }
+        .artifact-link:hover { gap: 0.6rem; }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--border);
+                padding: 1rem 1.5rem;
+                gap: 1rem;
+            }
+            .nav-toggle { display: block; }
+            .section { padding: 3rem 1.25rem; }
+            .hero { padding: 3.5rem 1.25rem 3rem; }
+            .artifact { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">Narayana Murari</a>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#value-proposition">Value Proposition</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-label">AIML-501 &middot; Professional Portfolio</div>
+    <h1>Narayana Murari</h1>
+    <p>Supply chain professional exploring the intersection of artificial intelligence, leadership, and operational excellence in retail logistics.</p>
+</header>
+
+<!-- About Me -->
+<div class="section-alt">
+<section id="about" class="section">
+    <div class="section-label">Background</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+        <div class="about-text">
+            <p>I am a Senior Software Engineer at Walmart, where I design and maintain distributed microservices that power store operations across 4,700 locations. My work on the Stores and Supply Chain technology team sits at the crossroads of software architecture, retail logistics, and AI integration.</p>
+            <p>I hold a Master's in Computer Science from UMBC and am currently pursuing a Master's in AI and Data Analytics at Indiana Wesleyan University. Previously, I built risk analytics platforms at Wells Fargo and conducted published IoT security research for the US Army Research Laboratory.</p>
+            <p>I believe that the best leaders are those who continuously learn, adapt, and use their unique gifts to serve others. This portfolio showcases the work I have done exploring AI/ML concepts, leadership, and their real-world applications in retail technology.</p>
+        </div>
+        <div class="contact-card">
+            <h3>Contact</h3>
+            <div class="contact-item">
+                <div class="contact-icon">&#9993;</div>
+                <span>narayana.murari@gmail.com</span>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#127891;</div>
+                <span>AIML-501 &middot; Machine Learning Fundamentals</span>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#128188;</div>
+                <span>Walmart &middot; Senior Software Engineer</span>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#128279;</div>
+                <span><a href="https://linkedin.com/in/narayana-murari" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">linkedin.com/in/narayana-murari</a></span>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+<!-- Value Proposition -->
+<section id="value-proposition" class="section">
+    <div class="section-label">My Unique Value</div>
+    <h2 class="section-title">Personal Value Proposition</h2>
+    <div class="section-divider"></div>
+    <div class="value-prop-card">
+        <p><strong>I bring a rare combination of hands-on software engineering at scale and a deep understanding of retail operations.</strong></p>
+        <p>As a Senior Software Engineer at Walmart, I architect distributed microservices that process over 15 million events daily, powering store operations for 500,000+ associates across 4,700 stores. My work on the Store Freight Delivery system, AI-powered assistant integrations (MCP servers for Ask SAM), and high-throughput event-driven architectures means I don't just study AI/ML in theory &mdash; I build and deploy the systems that bring it to life on the store floor.</p>
+        <p>With a Master's in Computer Science (3.97 GPA) from UMBC, prior experience building risk analytics platforms at Wells Fargo, and published research in IoT security (IEEE Mobisec 2023), I combine technical depth with the ability to lead cross-functional teams and translate complex engineering solutions into business impact. I am now pursuing a Master's in AI and Data Analytics at Indiana Wesleyan University to deepen my expertise in machine learning, leadership, and responsible AI adoption.</p>
+        <p><strong>What sets me apart:</strong> I sit at the intersection of engineering, operations, and leadership. I can design the architecture, write the code, understand the supply chain problem it solves, and lead the team through adoption. This end-to-end perspective is what I bring to every project, conversation, and collaboration.</p>
+    </div>
+</section>
+
+<!-- Skills -->
+<div class="section-alt">
+<section id="skills" class="section">
+    <div class="section-label">Competencies</div>
+    <h2 class="section-title">Skills &amp; Competencies</h2>
+    <div class="section-divider"></div>
+    <div class="skills-grid">
+        <div class="skill-card">
+            <h4>Distributed Systems</h4>
+            <p>Java Spring Boot, Kafka, Kubernetes, microservices at scale</p>
+            <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div class="skill-card">
+            <h4>Cloud &amp; DevOps</h4>
+            <p>Azure, CosmosDB, CI/CD pipelines, Docker, Helm</p>
+            <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-card">
+            <h4>AI &amp; Machine Learning</h4>
+            <p>Agentic AI, MCP servers, ML/DL concepts, Python, Spark</p>
+            <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-card">
+            <h4>Supply Chain Technology</h4>
+            <p>Freight delivery systems, store operations, inventory optimization</p>
+            <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-card">
+            <h4>Change Leadership</h4>
+            <p>Adaptive learning, cross-team collaboration, stakeholder communication</p>
+            <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+    </div>
+</section>
+</div>
+
+<!-- Portfolio Artifacts -->
+<section id="portfolio" class="section">
+    <div class="section-label">Coursework</div>
+    <h2 class="section-title">Portfolio Artifacts</h2>
+    <div class="section-divider"></div>
+
+    <!-- ═══ Artifact 1: Professional Self-Assessment ═══ -->
+    <div class="artifact" id="artifact-1">
+        <div class="artifact-header">
+            <div class="artifact-num">1</div>
+            <div>
+                <h3>Professional Self-Assessment: Leading Change in AI/ML Integration</h3>
+                <div class="meta">Workshop 1 &middot; Assignment 1.5 &middot; Leadership Development</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This artifact captures my initial self-assessment of leadership skills in both change management and AI/ML integration. Using two structured assessment tools, I evaluated myself across 14 competency categories to establish a growth baseline early in the course.</p>
+
+            <h4>Description</h4>
+            <p>I completed the AI/ML Integration Leadership Skills Self-Assessment and the Change Management Skills Self-Assessment. The AI/ML assessment scored competencies such as technical understanding, project management, stakeholder communication, change readiness, ethical AI, continuous improvement, and adoption strategies. The Change Management assessment covered communication skills, planning and organization, leadership, flexibility and adaptability, problem-solving, resilience, and emotional intelligence.</p>
+
+            <h4>Objective</h4>
+            <p>To create an honest, data-driven snapshot of where I stand as a leader at the intersection of established operational skills and emerging AI/ML territory, and to identify targeted areas for growth throughout the program.</p>
+
+            <h4>Process</h4>
+            <p>I first read two foundational articles on successful change leadership and assessing change management skills. I then completed both self-assessments independently, scoring each question on a Likert scale. After completing the assessments, I analyzed the results side by side, identified my top three strengths and areas for improvement, and reflected on the tools themselves, proposing revisions to make them more relevant for hands-on AI practitioners.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>AI/ML Integration Leadership Skills Self-Assessment Form, Change Management Skills Self-Assessment Form, Microsoft Word for documentation and reflection.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This artifact demonstrates that effective AI/ML leadership starts with self-awareness. By confronting honest gaps in technical knowledge alongside strong communication and leadership foundations, I show the capacity for intentional, strategic professional development.</p>
+            <p><strong>Relevance:</strong> For retail technology employers and supply chain professionals, this kind of structured introspection is rare. It signals a leader who approaches AI adoption thoughtfully rather than reactively, with a clear understanding of where to invest in growth.</p>
+
+            <h4>References</h4>
+            <p>Center for Creative Leadership. (n.d.). <em>How to be a successful change leader</em>. <a href="https://www.ccl.org/articles/leading-effectively-articles/successful-change-leader/" target="_blank" rel="noopener">https://www.ccl.org/articles/leading-effectively-articles/successful-change-leader/</a></p>
+            <p>Change Strategists. (n.d.). <em>How to assess change management skills</em>. <a href="https://changestrategists.com/how-to-assess-change-management-skills/" target="_blank" rel="noopener">https://changestrategists.com/how-to-assess-change-management-skills/</a></p>
+        </div>
+        <div class="tags">
+            <span class="tag">Leadership</span>
+            <span class="tag">Self-Assessment</span>
+            <span class="tag">Change Management</span>
+            <span class="tag">AI/ML Integration</span>
+            <span class="tag">Professional Development</span>
+        </div>
+    </div>
+
+    <!-- ═══ Artifact 2: AI & ML Timeline ═══ -->
+    <div class="artifact" id="artifact-2">
+        <div class="artifact-header">
+            <div class="artifact-num">2</div>
+            <div>
+                <h3>The Evolution of Artificial Intelligence &amp; Machine Learning: An Interactive Timeline</h3>
+                <div class="meta">Workshop 1 &middot; Discussion 1.3 &middot; Historical Research</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This artifact is an interactive, visually rich timeline that traces the evolution of AI and machine learning from Alan Turing's foundational 1950 paper through the current era of large language models and multimodal reasoning systems.</p>
+
+            <h4>Description</h4>
+            <p>The timeline covers 20 key milestones organized into color-coded eras: Early AI (1950s&ndash;1970s), AI Winters, Revival periods, the Deep Learning breakthrough era (2011&ndash;2017), and the LLM era (2020&ndash;present). Each entry includes the year, event name, detailed description, and key figures or organizations involved. The timeline features scroll-triggered animations, responsive design, and an alternating left-right layout for visual engagement.</p>
+
+            <h4>Objective</h4>
+            <p>To research and present the historical development of AI/ML in a format that is both educational and visually compelling, demonstrating the ability to synthesize complex technical history into an accessible resource.</p>
+
+            <h4>Process</h4>
+            <p>I studied three source types recommended by the course: a narrative video documentary on AI history, an IEEE scholarly article on AI evolution, and interactive data visualizations from Our World in Data. I then designed and coded a custom HTML/CSS/JavaScript timeline with era-based color coding, hover interactions, and intersection observer animations for a dynamic scroll experience.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>HTML5, CSS3 (gradients, animations, media queries), JavaScript (Intersection Observer API), Claude AI (research assistance), Google Fonts.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This timeline is not a generic copy-paste exercise. It is a hand-crafted, interactive web resource that demonstrates both research depth and front-end development capability, skills that set apart a supply chain professional who can also build digital tools.</p>
+            <p><strong>Relevance:</strong> Understanding where AI came from is essential for anyone leading its adoption. This resource can serve as a reference for colleagues, stakeholders, or team training sessions to contextualize why AI technologies work the way they do today.</p>
+
+            <h4>References</h4>
+            <p>Putchuon. (2024, May 30). <em>The entire history of artificial intelligence (Last 100 years)</em> [Video]. YouTube. <a href="https://www.youtube.com/watch?v=mSd9nmPM7Vg" target="_blank" rel="noopener">https://www.youtube.com/watch?v=mSd9nmPM7Vg</a></p>
+            <p>IEEE Computer Society. (n.d.). <em>The evolution of AI: From foundations to future prospects</em>. <a href="https://www.computer.org/publications/tech-news/research/evolution-of-ai" target="_blank" rel="noopener">https://www.computer.org/publications/tech-news/research/evolution-of-ai</a></p>
+            <p>Bender, E., &amp; Our World in Data. (n.d.). <em>A brief history of artificial intelligence</em>. <a href="https://ourworldindata.org/brief-history-of-ai" target="_blank" rel="noopener">https://ourworldindata.org/brief-history-of-ai</a></p>
+        </div>
+        <div class="tags">
+            <span class="tag">AI History</span>
+            <span class="tag">Research</span>
+            <span class="tag">Web Development</span>
+            <span class="tag">Data Visualization</span>
+            <span class="tag">Interactive Design</span>
+        </div>
+        <a href="artifacts/timeline.html" class="artifact-link">View Interactive Timeline &rarr;</a>
+    </div>
+
+    <!-- ═══ Artifact 3: AI Lab / Freight Planner Chatbot ═══ -->
+    <div class="artifact" id="artifact-3">
+        <div class="artifact-header">
+            <div class="artifact-num">3</div>
+            <div>
+                <h3>AI Lab: Generative AI Exploration &amp; Freight Planner Chatbot</h3>
+                <div class="meta">Workshop 1 &middot; Assignment 1.4 &middot; Hands-On AI Lab</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This artifact documents my hands-on exploration of three generative AI tools and culminates in a functional chatbot prototype designed to solve a real pain point in retail freight management.</p>
+
+            <h4>Description</h4>
+            <p>The lab had two parts. First, I tested and documented three AI tools: Claude (LLM testing with supply chain prompts), a Custom GPT Business Strategy Advisor (iterative prompting for AI implementation), and STORM AI (multi-perspective research synthesis). Second, using design thinking methodology, I identified a problem faced by store leaders&mdash;needing fast, conversational access to freight status without navigating multiple systems&mdash;and built a functional Freight Planner Chatbot prototype in HTML and JavaScript.</p>
+
+            <h4>Objective</h4>
+            <p>To demonstrate proficiency in using generative AI tools, analyze their outputs critically, and apply design thinking to develop a practical AI-based solution to a real workplace problem.</p>
+
+            <h4>Process</h4>
+            <p>For the AI tool exploration, I tested each tool with supply-chain-specific prompts, varying the input to observe how responses changed with added context, personal insight, and pushback. For the chatbot, I followed a design thinking process: empathize (identify store leaders' frustration with fragmented freight data), define (the need for a conversational interface), ideate (sketch chatbot features), prototype (build a working HTML/JS chatbot with keyword-based response matching, quick-action sidebar, and realistic freight data), and test (verify responses across freight, stocking, delivery, team assignment, and inventory scenarios).</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>Claude AI, Custom GPT (OpenAI), STORM AI, HTML5, CSS3, JavaScript, Design Thinking methodology.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This artifact goes beyond theoretical understanding. It shows that I can evaluate AI tools critically, identify real operational problems, and build working prototypes. The chatbot directly addresses a daily challenge I face at Walmart, demonstrating practical AI application in supply chain.</p>
+            <p><strong>Relevance:</strong> For any employer in retail or logistics, this demonstrates the ability to translate AI knowledge into tangible solutions. The combination of AI tool evaluation and functional prototype development shows initiative and applied technical capability.</p>
+        </div>
+        <div class="tags">
+            <span class="tag">Generative AI</span>
+            <span class="tag">Chatbot</span>
+            <span class="tag">Design Thinking</span>
+            <span class="tag">Prototyping</span>
+            <span class="tag">Supply Chain</span>
+        </div>
+        <a href="artifacts/chatbot.html" class="artifact-link">View Freight Planner Chatbot &rarr;</a>
+    </div>
+
+    <!-- ═══ Artifact 4: Empowered to Lead ═══ -->
+    <div class="artifact" id="artifact-4">
+        <div class="artifact-header">
+            <div class="artifact-num">4</div>
+            <div>
+                <h3>Empowered to Lead: Faith &amp; Leadership in an AI-Driven World</h3>
+                <div class="meta">Workshop 2 &middot; Assignment 2.1 &middot; Faith Integration</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This reflective artifact explores what it means to lead during times of rapid technological change, grounded in biblical wisdom and applied to daily supply chain operations.</p>
+
+            <h4>Description</h4>
+            <p>Drawing on three scripture passages&mdash;Psalm 139:13-14, 1 Peter 4:10, and James 1:5&mdash;I examined how God-given gifts such as analytical thinking, resilience, and calm under pressure directly support leadership in a technology-driven workplace. The reflection connects theological concepts of unique creation, stewardship, and wisdom-seeking to concrete scenarios in freight management, team mentoring, and AI system adoption.</p>
+
+            <h4>Objective</h4>
+            <p>To articulate how faith provides a foundation of confidence and purpose for leading through change, particularly in the context of AI and machine learning integration in retail operations.</p>
+
+            <h4>Process</h4>
+            <p>I reviewed my self-assessment results from Workshop 1 to ground the reflection in honest self-knowledge. I then studied each scripture passage and identified specific daily work scenarios that illustrated the principles: optimizing stocking plans (analytical gifts), mentoring team members through new AI systems (stewardship), and making high-pressure staffing decisions (seeking wisdom). I drafted, revised, and refined the reflection to balance personal authenticity with professional relevance.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>Bible Gateway (NIV), AI/ML Integration Leadership Skills Self-Assessment results, Change Management Skills Self-Assessment results, Microsoft Word.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This artifact demonstrates that leadership in an AI-driven world is not purely technical. It shows a holistic approach where faith, self-awareness, and purpose guide decision-making, a quality that distinguishes thoughtful leaders from those who chase technology for its own sake.</p>
+            <p><strong>Relevance:</strong> In a field increasingly focused on ethics and responsible AI, having a grounded moral framework is an asset. This reflection shows the capacity for values-driven leadership that considers the human impact of technological change.</p>
+        </div>
+        <div class="tags">
+            <span class="tag">Leadership</span>
+            <span class="tag">Faith Integration</span>
+            <span class="tag">Self-Awareness</span>
+            <span class="tag">Ethics</span>
+        </div>
+    </div>
+
+    <!-- ═══ Artifact 5: ML vs Deep Learning Report ═══ -->
+    <div class="artifact" id="artifact-5">
+        <div class="artifact-header">
+            <div class="artifact-num">5</div>
+            <div>
+                <h3>Machine Learning vs. Deep Learning: A Retail Supply Chain Analysis</h3>
+                <div class="meta">Workshop 2 &middot; Assignment 2.3 &middot; Technical Report</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This technical report analyzes the practical differences between machine learning and deep learning through two real-world applications in retail supply chain, demonstrating not just knowledge of the algorithms but an understanding of when and why each approach is the right fit.</p>
+
+            <h4>Description</h4>
+            <p>The report examines two case studies. First, demand forecasting using traditional ML: Walmart uses algorithms like XGBoost and random forests with structured tabular data (historical sales, seasonality, promotions, weather, store attributes) to predict product demand. ML is ideal because the data is structured, relationships are interpretable, training is fast, and results are explainable to supply chain managers. Second, shelf monitoring using deep learning: retailers deploy camera-based systems using convolutional neural networks (CNNs) to detect out-of-stock items and misplaced products in real time. Deep learning excels because it processes raw image data, automatically learns hierarchical visual features, and adapts to varying lighting and camera angles. The report includes a detailed comparison table contrasting data type, feature engineering, algorithms, computational cost, interpretability, data volume, and best-fit applications.</p>
+
+            <h4>Objective</h4>
+            <p>To differentiate between machine learning and deep learning by selecting and analyzing real-world applications relevant to retail supply chain, and to explain why each approach is suitable (and the other is not) for the given problem.</p>
+
+            <h4>Process</h4>
+            <p>I began by studying the course lesson materials on ML and DL fundamentals. I then researched real-world applications at Walmart and other retailers, selecting demand forecasting and shelf monitoring because they are directly relevant to my work and clearly illustrate the strengths and limitations of each approach. I drafted the analysis for each example, explaining both why the chosen approach is suitable and why the alternative is not. Finally, I created a comparison table and revised the language to be accessible to both technical and non-technical readers.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>Microsoft Word, course lesson materials on ML and DL, industry research on retail AI applications.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This report demonstrates the ability to make informed technology decisions, not just understand the theory. By grounding the analysis in actual retail operations, it shows practical judgment about which AI tools to deploy for which problems, a critical skill for anyone leading AI adoption.</p>
+            <p><strong>Relevance:</strong> Retail and supply chain professionals increasingly need to evaluate AI solutions. This artifact provides a model for how to think about ML vs. DL trade-offs in context, making it a useful reference for colleagues, managers, or hiring teams evaluating AI literacy.</p>
+
+            <h4>References</h4>
+            <p>Course lesson materials: <em>Machine Learning vs. Deep Learning</em> (AIML-501, Workshop 2).</p>
+        </div>
+        <div class="tags">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Deep Learning</span>
+            <span class="tag">Supply Chain</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Demand Forecasting</span>
+        </div>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2026 Narayana Murari &mdash; AI &amp; Machine Learning Professional Portfolio</p>
+    <p style="margin-top: 0.4rem;">AIML-501 &middot; Indiana Wesleyan University</p>
+</footer>
+
+</body>
+</html>
