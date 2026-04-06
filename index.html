@@ -328,6 +328,7 @@
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#value-proposition">Value Proposition</a></li>
+            <li><a href="#target-audience">Audience</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#portfolio">Portfolio</a></li>
         </ul>
@@ -386,6 +387,18 @@
         <p>As a Senior Software Engineer at Walmart, I architect distributed microservices that process over 15 million events daily, powering store operations for 500,000+ associates across 4,700 stores. My work on the Store Freight Delivery system, AI-powered assistant integrations (MCP servers for Ask SAM), and high-throughput event-driven architectures means I don't just study AI/ML in theory &mdash; I build and deploy the systems that bring it to life on the store floor.</p>
         <p>With a Master's in Computer Science (3.97 GPA) from UMBC, prior experience building risk analytics platforms at Wells Fargo, and published research in IoT security (IEEE Mobisec 2023), I combine technical depth with the ability to lead cross-functional teams and translate complex engineering solutions into business impact. I am now pursuing a Master's in AI and Data Analytics at Indiana Wesleyan University to deepen my expertise in machine learning, leadership, and responsible AI adoption.</p>
         <p><strong>What sets me apart:</strong> I sit at the intersection of engineering, operations, and leadership. I can design the architecture, write the code, understand the supply chain problem it solves, and lead the team through adoption. This end-to-end perspective is what I bring to every project, conversation, and collaboration.</p>
+    </div>
+</section>
+
+<!-- Target Audience -->
+<section id="target-audience" class="section">
+    <div class="section-label">Who This Is For</div>
+    <h2 class="section-title">Target Audience</h2>
+    <div class="section-divider"></div>
+    <div class="value-prop-card">
+        <p><strong>This portfolio is designed for my peers in the Master's in AI and Data Analytics program at Indiana Wesleyan University.</strong></p>
+        <p>As fellow graduate students navigating the intersection of AI, leadership, and real-world application, you understand the challenge of bridging theory and practice. The artifacts in this portfolio are meant to serve as shared resources &mdash; practical examples of how AI/ML concepts can be applied to operational problems, communicated to non-technical audiences, and evaluated through the lens of ethics and responsible adoption.</p>
+        <p>Whether you are exploring how neural networks work, grappling with bias in AI systems, or building your own portfolio, I hope this collection offers ideas, frameworks, and inspiration you can adapt to your own professional context.</p>
     </div>
 </section>
 
@@ -520,6 +533,89 @@
         <a href="https://github.com/Narayana-Murari/FreightChatbot/tree/main" class="artifact-link" target="_blank" rel="noopener">View Source Code on GitHub &rarr;</a>
     </div>
 
+    <!-- ═══ Artifact 3: Neural Networks Explainer ═══ -->
+    <div class="artifact" id="artifact-3">
+        <div class="artifact-header">
+            <div class="artifact-num">3</div>
+            <div>
+                <h3>How Neural Networks Learn: An Interactive Explainer</h3>
+                <div class="meta">Workshop 3 &middot; Discussion 3.4 &middot; Communicating for Learning</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This artifact is an interactive, visual explainer that demystifies how neural networks process data, learn from mistakes, and improve over time. It uses a freight dock analogy — training a new associate through show, try, correct, repeat — to make the concept accessible to non-technical audiences.</p>
+
+            <h4>Description</h4>
+            <p>The explainer walks the reader through five steps: the freight dock analogy, neural network architecture (with an interactive canvas diagram), a live training simulator that shows loss decreasing and accuracy increasing over epochs, a shelf-classification demo where users click to see the network classify retail images, and a discussion of trade-offs including the black box problem. Each section includes scroll-tracked navigation and interactive elements.</p>
+
+            <h4>Objective</h4>
+            <p>To demonstrate the ability to communicate complex technical concepts — specifically how neural networks learn — in a way that is clear, engaging, and accessible to peers who may not have a deep technical background, while grounding the explanation in a real-world retail context.</p>
+
+            <h4>Process</h4>
+            <p>I started by writing a plain-language explanation of neural networks for the Discussion 3.4 assignment, using a freight dock analogy drawn from my daily work at Walmart. I then expanded this into a multi-section interactive web experience with a canvas-based network diagram, a training epoch simulator, and a clickable shelf classification demo. The design uses a dark theme with layered animations to keep the reader engaged through progressively deeper content.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>HTML5, CSS3 (custom properties, gradients, sticky navigation), JavaScript (Canvas API, Intersection Observer, DOM manipulation), Claude AI (content refinement), Google Fonts.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This artifact goes beyond a static explanation. The interactive training simulator and clickable classification demo let the reader <em>experience</em> how a neural network learns, not just read about it. The freight dock analogy grounds abstract math in a tangible, relatable scenario that any operations professional can understand.</p>
+            <p><strong>Relevance:</strong> For peers in the AIML program, this serves as both a learning resource and a template for how to communicate technical AI concepts to non-technical stakeholders — a critical skill for anyone leading AI adoption in their organization.</p>
+
+            <h4>References</h4>
+            <p>Discussion 3.4 — Communicating for Learning: "The Best Simple Explanation of Neural Networks in Machine Learning." Original discussion post developed for AIML-501, Workshop 3.</p>
+        </div>
+        <div class="tags">
+            <span class="tag">Neural Networks</span>
+            <span class="tag">Interactive Explainer</span>
+            <span class="tag">Communication</span>
+            <span class="tag">Web Development</span>
+            <span class="tag">Canvas API</span>
+        </div>
+        <a href="artifacts/neural-networks.html" class="artifact-link">View Interactive Explainer &rarr;</a>
+    </div>
+
+    <!-- ═══ Artifact 4: Navigating Human Bias ═══ -->
+    <div class="artifact" id="artifact-4">
+        <div class="artifact-header">
+            <div class="artifact-num">4</div>
+            <div>
+                <h3>Navigating Human Bias in AI: An Interactive Guide</h3>
+                <div class="meta">Workshop 4 &middot; Discussion 4.4 &middot; Navigating Human Bias</div>
+            </div>
+        </div>
+        <div class="artifact-body">
+            <h4>Introduction</h4>
+            <p>This artifact is an interactive guide that explores how human bias gets encoded into AI systems and presents four field-tested strategies for addressing it in retail supply chain operations. It combines a personal value statement, visual bias-flow diagrams, real-world scenario explorations, a self-assessment checklist, and a knowledge-check quiz.</p>
+
+            <h4>Description</h4>
+            <p>The guide is organized into five sections: a personal value statement on bias in AI-driven operations, a visual diagram showing how bias flows from human decisions through data into scaled AI outputs, four expandable strategy cards with detailed approaches, a tabbed scenario explorer with three retail-specific bias cases (scheduling, demand forecasting, performance reviews), and a self-check section with an interactive checklist and quiz. Sticky tab navigation tracks scroll position across sections.</p>
+
+            <h4>Objective</h4>
+            <p>To articulate a clear personal value statement on addressing human bias in AI, and to provide practical, actionable strategies grounded in retail supply chain experience that peers can adapt to their own professional contexts.</p>
+
+            <h4>Process</h4>
+            <p>I developed the original discussion post for Workshop 4, drawing on my experience with AI-powered scheduling, demand forecasting, and workforce optimization tools at Walmart. I then expanded the four strategies into an interactive web experience with scenario explorations that illustrate how bias manifests in real systems, a self-assessment checklist for reflective practice, and a quiz that reinforces the key distinction between suppressed demand and low demand.</p>
+
+            <h4>Tools &amp; Technologies Used</h4>
+            <p>HTML5, CSS3 (custom properties, responsive grid, transitions), JavaScript (DOM manipulation, interactive state management), Claude AI (content refinement), Google Fonts.</p>
+
+            <h4>Value Proposition</h4>
+            <p><strong>Unique Value:</strong> This artifact is not a theoretical essay on bias. It presents specific, implementable strategies drawn from real retail AI deployments, with interactive scenarios that let the reader explore how bias manifests and what to do about it. The self-assessment checklist turns passive reading into active reflection.</p>
+            <p><strong>Relevance:</strong> For peers in the AIML program, this serves as a practical framework for responsible AI adoption. The scenarios are specific enough to be immediately useful for anyone working in operations, HR, or supply chain — and the underlying principles (audit, diversify, include, reflect) apply across industries.</p>
+
+            <h4>References</h4>
+            <p>Discussion 4.4 — Navigating Human Bias: "Personal Value Statement and Field-Specific Strategies for Addressing Human Bias." Original discussion post developed for AIML-501, Workshop 4.</p>
+        </div>
+        <div class="tags">
+            <span class="tag">AI Ethics</span>
+            <span class="tag">Bias Mitigation</span>
+            <span class="tag">Leadership</span>
+            <span class="tag">Interactive Guide</span>
+            <span class="tag">Supply Chain</span>
+        </div>
+        <a href="artifacts/navigating-bias.html" class="artifact-link">View Interactive Guide &rarr;</a>
+    </div>
 
 </section>
 

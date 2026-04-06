@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigating Human Bias in AI — An Interactive Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --bg-card: #ffffff;
+            --bg-dark: #1c1917;
+            --accent: #d97706;
+            --accent-light: #fef3c7;
+            --accent-mid: #fde68a;
+            --blue: #2563eb;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-light: #ecfdf5;
+            --red: #dc2626;
+            --red-light: #fef2f2;
+            --purple: #7c3aed;
+            --purple-light: #f5f3ff;
+            --text: #1c1917;
+            --text-dim: #57534e;
+            --text-muted: #a8a29e;
+            --border: #e7e5e4;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1c1917 0%, #44403c 100%);
+            color: #fff;
+            padding: 4.5rem 1.5rem 3.5rem;
+            text-align: center;
+        }
+        .hero-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.05rem;
+            color: #a8a29e;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* Sticky tabs */
+        .tab-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250,250,249,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .tab-nav .container {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 0.85rem 1.25rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section {
+            padding: 3.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .section:last-of-type { border-bottom: none; }
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .section p { color: var(--text-dim); margin-bottom: 1rem; }
+        .section p strong { color: var(--text); }
+
+        /* Value statement card */
+        .value-card {
+            background: linear-gradient(135deg, var(--accent-light), #fff7ed);
+            border: 1px solid var(--accent-mid);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        .value-card p { color: var(--text-dim); margin-bottom: 0.75rem; }
+        .value-card p:last-child { margin-bottom: 0; }
+
+        /* Strategy cards */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+        .strategy-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .strategy-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+        }
+        .strategy-header {
+            padding: 1.25rem 1.25rem 0.75rem;
+        }
+        .strategy-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .strategy-card:nth-child(1) .strategy-num { background: var(--blue-light); color: var(--blue); }
+        .strategy-card:nth-child(2) .strategy-num { background: var(--green-light); color: var(--green); }
+        .strategy-card:nth-child(3) .strategy-num { background: var(--purple-light); color: var(--purple); }
+        .strategy-card:nth-child(4) .strategy-num { background: var(--red-light); color: var(--red); }
+        .strategy-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .strategy-summary { font-size: 0.85rem; color: var(--text-dim); padding: 0 1.25rem; }
+        .strategy-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 1.25rem;
+        }
+        .strategy-card.expanded .strategy-detail {
+            max-height: 500px;
+            padding: 1rem 1.25rem 1.25rem;
+        }
+        .strategy-detail p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+        .strategy-expand {
+            display: block;
+            width: 100%;
+            padding: 0.6rem;
+            background: none;
+            border: none;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent);
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: background 0.2s;
+        }
+        .strategy-expand:hover { background: var(--accent-light); }
+
+        /* Interactive Bias Scenario Explorer */
+        .scenario-explorer {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        .scenario-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .scenario-tab {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .scenario-tab:hover { background: var(--bg); }
+        .scenario-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            font-weight: 600;
+            background: var(--accent-light);
+        }
+        .scenario-content {
+            padding: 1.75rem;
+            display: none;
+        }
+        .scenario-content.active { display: block; }
+        .scenario-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .scenario-content p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.75rem; }
+
+        /* Bias flow diagram */
+        .bias-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 500;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+        .flow-step:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .flow-step .flow-icon { font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .flow-step .flow-label { color: var(--text-dim); font-size: 0.75rem; }
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Interactive checklist */
+        .checklist {
+            margin: 1.5rem 0;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .checklist-item:hover { border-color: var(--accent); }
+        .checklist-item.checked {
+            background: var(--green-light);
+            border-color: var(--green);
+        }
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            margin-top: 1px;
+        }
+        .checklist-item.checked .check-box {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+        }
+        .check-text { font-size: 0.88rem; color: var(--text-dim); }
+        .checklist-item.checked .check-text { color: var(--text); }
+        .checklist-progress {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-top: 0.75rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        /* Quiz section */
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .quiz-card p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1rem; }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dim);
+        }
+        .quiz-option:hover { border-color: var(--accent); background: var(--accent-light); }
+        .quiz-option.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); font-weight: 500; }
+        .quiz-option.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+        .quiz-option.incorrect { border-color: var(--red); background: var(--red-light); color: var(--red); }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: var(--green-light); color: var(--green); border: 1px solid var(--green); }
+        .quiz-feedback.incorrect-fb { background: var(--red-light); color: var(--red); border: 1px solid var(--red); }
+
+        /* Reflection prompt */
+        .reflection-card {
+            background: var(--purple-light);
+            border: 1px solid #ddd6fe;
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .reflection-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--purple);
+            margin-bottom: 0.75rem;
+        }
+        .reflection-card p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 0; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .strategy-grid { grid-template-columns: 1fr; }
+            .bias-flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            .scenario-tabs { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-label">Workshop 4 &middot; Discussion 4.4 &middot; Navigating Human Bias</div>
+    <h1>Navigating Human Bias in AI</h1>
+    <p>An interactive exploration of how human bias gets encoded into AI systems, and four field-tested strategies for addressing it in retail supply chain operations.</p>
+</header>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+    <div class="container">
+        <button class="tab-btn active" onclick="scrollTo('value-statement')">Value Statement</button>
+        <button class="tab-btn" onclick="scrollTo('how-bias-flows')">How Bias Flows</button>
+        <button class="tab-btn" onclick="scrollTo('strategies')">4 Strategies</button>
+        <button class="tab-btn" onclick="scrollTo('scenarios')">Scenario Explorer</button>
+        <button class="tab-btn" onclick="scrollTo('self-check')">Self-Check</button>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Section 1: Value Statement -->
+    <section class="section" id="value-statement">
+        <div class="section-label">Foundation</div>
+        <h2 class="section-title">Personal Value Statement</h2>
+        <p>Before addressing bias in AI systems, it starts with a personal commitment. This value statement anchors the strategies that follow.</p>
+
+        <div class="value-card">
+            <p>As a leader in retail supply chain operations, I recognize that human bias — both conscious and unconscious — <strong>shapes every layer of our decision-making</strong>, from how we schedule labor to how we evaluate vendor performance.</p>
+            <p>In an industry increasingly powered by AI-driven demand forecasting, automated replenishment, and workforce optimization, these biases don't just persist — <strong>they get encoded into systems that scale them across thousands of stores.</strong></p>
+            <p>I am committed to building a culture where data-driven decisions are regularly interrogated for the assumptions behind them, where diverse perspectives are structurally included, and where <strong>technology serves to reduce inequity rather than automate it.</strong></p>
+        </div>
+    </section>
+
+    <!-- Section 2: How Bias Flows -->
+    <section class="section" id="how-bias-flows">
+        <div class="section-label">The Problem</div>
+        <h2 class="section-title">How Human Bias Gets Into AI</h2>
+        <p>Bias doesn't enter AI systems through malice. It enters through <strong>data that reflects historical decisions</strong> — decisions that were shaped by the biases of the people who made them. Here's the flow:</p>
+
+        <div class="bias-flow">
+            <div class="flow-step">
+                <div class="flow-icon">&#129504;</div>
+                <div><strong>Human Decisions</strong></div>
+                <div class="flow-label">Shaped by bias</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <div class="flow-icon">&#128202;</div>
+                <div><strong>Historical Data</strong></div>
+                <div class="flow-label">Records those decisions</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <div class="flow-icon">&#9881;&#65039;</div>
+                <div><strong>ML Training</strong></div>
+                <div class="flow-label">Learns the patterns</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <div class="flow-icon">&#128260;</div>
+                <div><strong>Scaled Decisions</strong></div>
+                <div class="flow-label">Bias at 4,700 stores</div>
+            </div>
+        </div>
+
+        <p>The critical insight: <strong>the model isn't "biased" in the human sense</strong> — it's faithfully reproducing patterns in the data. The bias was already there. The model just scales it faster and further than any human could.</p>
+    </section>
+
+    <!-- Section 3: Four Strategies -->
+    <section class="section" id="strategies">
+        <div class="section-label">Action Plan</div>
+        <h2 class="section-title">Four Strategies for Addressing Bias</h2>
+        <p>These strategies are drawn from my experience in retail supply chain operations. <strong>Click each card</strong> to expand the full approach.</p>
+
+        <div class="strategy-grid">
+            <!-- Strategy 1 -->
+            <div class="strategy-card" onclick="toggleStrategy(this)">
+                <div class="strategy-header">
+                    <div class="strategy-num">1</div>
+                    <h4>Audit Algorithmic Decision-Making</h4>
+                </div>
+                <div class="strategy-summary">AI-powered scheduling tools determine who works when and how many hours they receive. If historical data reflects biased patterns, the algorithm reproduces them.</div>
+                <div class="strategy-detail">
+                    <p><strong>The problem:</strong> If scheduling data historically assigned certain demographic groups to less desirable shifts, the algorithm will learn and repeat those patterns — automatically, at scale, without anyone noticing.</p>
+                    <p><strong>The approach:</strong> Implement regular bias audits on scheduling outputs. Compare shift distribution across demographic groups. Flag statistical anomalies. Partner with HR analytics to establish fairness benchmarks and hold the technology accountable to them.</p>
+                    <p><strong>Key principle:</strong> You can't fix what you don't measure. Regular audits make invisible bias visible.</p>
+                </div>
+                <button class="strategy-expand">Read more &darr;</button>
+            </div>
+
+            <!-- Strategy 2 -->
+            <div class="strategy-card" onclick="toggleStrategy(this)">
+                <div class="strategy-header">
+                    <div class="strategy-num">2</div>
+                    <h4>Diversify Input Data for Demand Planning</h4>
+                </div>
+                <div class="strategy-summary">Demand forecasting models trained on historical sales data reflect past decisions about which communities received marketing investment and which stores were prioritized.</div>
+                <div class="strategy-detail">
+                    <p><strong>The problem:</strong> If certain neighborhoods were historically underserved — less marketing, fewer product launches, lower inventory allocation — the model learns that "demand is low" in those areas. But it's confusing <em>suppressed demand</em> with <em>low demand</em>.</p>
+                    <p><strong>The approach:</strong> Enrich training data with external signals — census data, community feedback, local event calendars. Test model performance across different store demographics to ensure equitable service levels.</p>
+                    <p><strong>Key principle:</strong> The data you choose to include (or exclude) is itself a decision that carries assumptions. Diversifying inputs disrupts self-reinforcing cycles.</p>
+                </div>
+                <button class="strategy-expand">Read more &darr;</button>
+            </div>
+
+            <!-- Strategy 3 -->
+            <div class="strategy-card" onclick="toggleStrategy(this)">
+                <div class="strategy-header">
+                    <div class="strategy-num">3</div>
+                    <h4>Cross-Functional Review Panels</h4>
+                </div>
+                <div class="strategy-summary">When introducing AI tools into operations, the evaluation team should not be limited to data scientists and engineers alone.</div>
+                <div class="strategy-detail">
+                    <p><strong>The problem:</strong> Technical teams build what they understand. Without frontline input, edge cases and blind spots go undetected until the system fails in production — often in ways that disproportionately affect certain groups.</p>
+                    <p><strong>The approach:</strong> Include frontline associates, store managers from diverse backgrounds, and community representatives in AI rollout evaluations. The people closest to the work are the first to notice when a system's recommendations don't match reality.</p>
+                    <p><strong>Key principle:</strong> Diversity in review isn't a checkbox — it's a structural safeguard against the homogeneity of perspective that lets bias pass unnoticed.</p>
+                </div>
+                <button class="strategy-expand">Read more &darr;</button>
+            </div>
+
+            <!-- Strategy 4 -->
+            <div class="strategy-card" onclick="toggleStrategy(this)">
+                <div class="strategy-header">
+                    <div class="strategy-num">4</div>
+                    <h4>Foster Reflective Practice in Leadership</h4>
+                </div>
+                <div class="strategy-summary">In a high-pressure retail environment, it's easy to default to gut instinct and pattern recognition — which is precisely where bias thrives.</div>
+                <div class="strategy-detail">
+                    <p><strong>The problem:</strong> Leaders under time pressure rely on heuristics. Those heuristics are shaped by experience, which is shaped by environment — and environments are rarely bias-free. Speed and "trust your gut" culture actively suppress the reflection needed to catch bias.</p>
+                    <p><strong>The approach:</strong> Model self-reflection as a leadership practice. Openly discuss your own biases in team settings. Encourage others to do the same. Build in deliberate pauses for reflection before high-impact decisions.</p>
+                    <p><strong>Key principle:</strong> Treating bias identification as a sign of growth — not failure — creates psychological safety for the whole team to do the same.</p>
+                </div>
+                <button class="strategy-expand">Read more &darr;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Scenario Explorer -->
+    <section class="section" id="scenarios">
+        <div class="section-label">Applied Learning</div>
+        <h2 class="section-title">Bias Scenario Explorer</h2>
+        <p>Explore three real-world scenarios where human bias can infiltrate AI systems in retail operations. <strong>Click each tab</strong> to see the scenario, the bias, and the mitigation.</p>
+
+        <div class="scenario-explorer">
+            <div class="scenario-tabs">
+                <button class="scenario-tab active" onclick="showScenario(0)">Scheduling</button>
+                <button class="scenario-tab" onclick="showScenario(1)">Demand Forecasting</button>
+                <button class="scenario-tab" onclick="showScenario(2)">Performance Reviews</button>
+            </div>
+
+            <div class="scenario-content active" id="scenario-0">
+                <h4>AI Scheduling Tool Perpetuates Shift Inequity</h4>
+                <p><strong>Situation:</strong> An AI scheduling system is deployed across 200 stores. It optimizes for labor cost and historical availability patterns. After 6 months, analysis reveals that single parents are disproportionately assigned to undesirable overnight shifts.</p>
+                <p><strong>The Bias:</strong> Single parents historically accepted overnight shifts because they had no other option. The model interpreted this as "preference" and reinforced the pattern — now assigning overnight shifts to similar profiles by default.</p>
+                <p><strong>The Fix:</strong> Add availability preference surveys as input data (not just historical acceptance). Implement fairness constraints that cap the percentage of undesirable shifts assigned to any demographic group. Run quarterly equity audits on shift distribution.</p>
+            </div>
+
+            <div class="scenario-content" id="scenario-1">
+                <h4>Demand Model Underserves Low-Income Neighborhoods</h4>
+                <p><strong>Situation:</strong> A demand forecasting model recommends lower inventory allocation for stores in predominantly low-income neighborhoods. These stores frequently experience stockouts of essential items while higher-income area stores are overstocked.</p>
+                <p><strong>The Bias:</strong> Historical data shows lower sales in these stores — but the <em>cause</em> was chronic understocking, not low demand. Customers stopped coming because items were never in stock. The model learned "low sales" as "low demand" and reinforced the cycle.</p>
+                <p><strong>The Fix:</strong> Include stockout frequency as a feature (stockouts suppress demand, they don't reflect it). Supplement with external data: census population density, foot traffic data, competitor presence. Pilot a "demand liberation" test — stock at full levels for 90 days and measure true demand.</p>
+            </div>
+
+            <div class="scenario-content" id="scenario-2">
+                <h4>Performance Review System Favors Visibility Over Output</h4>
+                <p><strong>Situation:</strong> An AI tool summarizes associate performance for annual reviews using metrics like "time on floor," "interactions logged," and "manager mentions." Remote and overnight associates consistently score lower than daytime associates.</p>
+                <p><strong>The Bias:</strong> The metrics used as inputs are proxies for visibility, not performance. Associates who work when managers are present get "mentioned" more. Overnight workers who stock 90% of freight are invisible in the data because no manager was there to log interactions.</p>
+                <p><strong>The Fix:</strong> Redefine performance metrics to measure output (pallets stocked, accuracy rate, on-time completion) rather than visibility proxies. Weight all shifts equally. Include self-reported contributions. Validate the tool's output against manual review for the first two cycles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Self-Check -->
+    <section class="section" id="self-check">
+        <div class="section-label">Reflection</div>
+        <h2 class="section-title">Bias-Awareness Self-Check</h2>
+        <p>Use this interactive checklist to reflect on your own practices when working with AI systems. <strong>Click each item</strong> you currently practice.</p>
+
+        <div class="checklist" id="biasChecklist">
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I regularly ask "What assumptions are baked into this data?" before trusting model outputs.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I involve people from diverse backgrounds when evaluating AI system recommendations.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I test model performance across different demographic groups, not just overall accuracy.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I question whether "low performance" metrics might actually reflect biased measurement systems.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I differentiate between "suppressed demand" and "low demand" when reviewing data patterns.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I openly discuss my own biases in team settings and encourage others to do the same.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I build deliberate pauses for reflection before high-impact, data-driven decisions.</div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-text">I advocate for including frontline workers' perspectives in AI system evaluations.</div>
+            </div>
+        </div>
+        <div class="checklist-progress">
+            <span id="checkProgress">0 of 8 practices</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+        </div>
+
+        <div class="quiz-card" style="margin-top: 2rem;">
+            <h4>Quick Knowledge Check</h4>
+            <p>A demand forecasting model consistently recommends lower inventory for stores in low-income neighborhoods. Sales data supports this recommendation. What should you investigate first?</p>
+            <div class="quiz-options" id="quizOptions">
+                <div class="quiz-option" onclick="answerQuiz(this, false)">A. Accept the recommendation — the data supports it.</div>
+                <div class="quiz-option" onclick="answerQuiz(this, false)">B. Remove neighborhood income data from the model to prevent bias.</div>
+                <div class="quiz-option" onclick="answerQuiz(this, true)">C. Check whether chronic understocking suppressed demand in those stores.</div>
+                <div class="quiz-option" onclick="answerQuiz(this, false)">D. Increase inventory everywhere equally to be fair.</div>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+
+        <div class="reflection-card">
+            <h4>A Reflection for Leaders</h4>
+            <p>The hardest part of addressing bias in AI isn't the technology — it's the willingness to question systems that appear to be working. A model can be highly accurate and deeply unfair at the same time. The discipline of asking <strong>"accurate for whom?"</strong> and <strong>"optimized at whose expense?"</strong> is what separates responsible AI adoption from automation of the status quo.</p>
+        </div>
+    </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>Created by Narayana Murari &middot; Workshop 4, Discussion 4.4 &middot; AIML-501</p>
+    <p style="margin-top: 0.3rem;">AI tools (Claude) were used for research assistance and content refinement</p>
+    <p style="margin-top: 0.5rem;"><a href="../index.html">&larr; Back to Portfolio</a></p>
+</footer>
+
+<script>
+    // Strategy card expand/collapse
+    function toggleStrategy(card) {
+        const wasExpanded = card.classList.contains('expanded');
+        // Close all
+        document.querySelectorAll('.strategy-card').forEach(c => {
+            c.classList.remove('expanded');
+            c.querySelector('.strategy-expand').textContent = 'Read more \u2193';
+        });
+        // Toggle clicked
+        if (!wasExpanded) {
+            card.classList.add('expanded');
+            card.querySelector('.strategy-expand').textContent = 'Show less \u2191';
+        }
+    }
+
+    // Scenario tabs
+    function showScenario(index) {
+        document.querySelectorAll('.scenario-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+        document.querySelectorAll('.scenario-content').forEach((c, i) => c.classList.toggle('active', i === index));
+    }
+
+    // Checklist
+    function toggleCheck(item) {
+        item.classList.toggle('checked');
+        const checkBox = item.querySelector('.check-box');
+        checkBox.textContent = item.classList.contains('checked') ? '\u2713' : '';
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const total = document.querySelectorAll('.checklist-item').length;
+        const checked = document.querySelectorAll('.checklist-item.checked').length;
+        document.getElementById('checkProgress').textContent = `${checked} of ${total} practices`;
+        document.getElementById('progressFill').style.width = ((checked / total) * 100) + '%';
+    }
+
+    // Quiz
+    let quizAnswered = false;
+    function answerQuiz(option, isCorrect) {
+        if (quizAnswered) return;
+        quizAnswered = true;
+
+        document.querySelectorAll('.quiz-option').forEach(o => {
+            o.style.pointerEvents = 'none';
+        });
+
+        const feedback = document.getElementById('quizFeedback');
+        if (isCorrect) {
+            option.classList.add('correct');
+            feedback.className = 'quiz-feedback show correct-fb';
+            feedback.textContent = 'Correct! Low sales in historically understocked stores often reflect suppressed demand, not true low demand. Investigating stockout history before trusting the model is the right first step.';
+        } else {
+            option.classList.add('incorrect');
+            // Highlight correct answer
+            document.querySelectorAll('.quiz-option')[2].classList.add('correct');
+            feedback.className = 'quiz-feedback show incorrect-fb';
+            feedback.textContent = 'Not quite. The correct approach is C: investigate whether chronic understocking suppressed demand. Data can be accurate yet misleading — low sales in an understocked store don\'t mean low demand.';
+        }
+    }
+
+    // Scroll navigation
+    function scrollTo(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Active tab tracking
+    const sectionIds = ['value-statement', 'how-bias-flows', 'strategies', 'scenarios', 'self-check'];
+    window.addEventListener('scroll', () => {
+        const tabs = document.querySelectorAll('.tab-btn');
+        let activeIndex = 0;
+        sectionIds.forEach((id, i) => {
+            const el = document.getElementById(id);
+            if (el && el.getBoundingClientRect().top < 200) activeIndex = i;
+        });
+        tabs.forEach((t, i) => t.classList.toggle('active', i === activeIndex));
+    });
+</script>
+
+</body>
+</html>
