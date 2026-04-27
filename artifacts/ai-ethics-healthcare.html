@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bias in Healthcare — An Ethics Case Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --bg-card: #ffffff;
+            --accent: #dc2626;
+            --accent-light: #fef2f2;
+            --accent-mid: #fecaca;
+            --blue: #1d4ed8;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-light: #ecfdf5;
+            --amber: #d97706;
+            --amber-light: #fffbeb;
+            --purple: #7c3aed;
+            --purple-light: #f5f3ff;
+            --slate: #1e293b;
+            --text: #0f172a;
+            --text-dim: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 40%, #450a0a 100%);
+            color: #fff;
+            padding: 4.5rem 1.5rem 3.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 70% 80%, rgba(220,38,38,0.15) 0%, transparent 60%);
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-mid);
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.05rem;
+            color: #cbd5e1;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* Sticky nav */
+        .tab-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .tab-nav .container {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 0.8rem 1.1rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section {
+            padding: 3.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .section:last-of-type { border-bottom: none; }
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .section p { color: var(--text-dim); margin-bottom: 1rem; }
+        .section p strong { color: var(--text); }
+
+        /* Stat cards */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .stat-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* Summary card */
+        .summary-card {
+            background: var(--accent-light);
+            border: 1px solid var(--accent-mid);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .summary-card p { color: var(--text-dim); margin-bottom: 0.75rem; }
+        .summary-card p:last-child { margin-bottom: 0; }
+
+        /* Bias flow diagram */
+        .flow-container {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .flow-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .bias-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0.4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            flex: 1;
+            min-width: 140px;
+            max-width: 180px;
+            transition: all 0.3s;
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .flow-step:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(220,38,38,0.1);
+            transform: translateY(-2px);
+        }
+        .flow-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+        .flow-name { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .flow-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Feedback loop */
+        .feedback-loop {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--accent-light);
+            border: 1px dashed var(--accent-mid);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Issue cards */
+        .issue-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .issue-tab {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-card);
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dim);
+        }
+        .issue-tab:hover { border-color: var(--accent); color: var(--text); }
+        .issue-tab.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .issue-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: none;
+        }
+        .issue-content.active { display: block; }
+        .issue-body { padding: 1.75rem; }
+        .issue-body h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .issue-body p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.75rem; }
+
+        /* Sub-sections within issue */
+        .issue-sub {
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .issue-sub-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+        }
+        .label-why { color: var(--blue); }
+        .label-analysis { color: var(--amber); }
+        .label-solution { color: var(--green); }
+
+        /* COVID section */
+        .covid-card {
+            background: linear-gradient(135deg, var(--amber-light), #fff);
+            border: 1px solid #fde68a;
+            border-left: 4px solid var(--amber);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .covid-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--amber);
+            margin-bottom: 0.75rem;
+        }
+        .covid-card p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.75rem; }
+        .covid-card p:last-child { margin-bottom: 0; }
+
+        /* Interactive quiz */
+        .quiz-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-wrapper h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-wrapper > p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+        .quiz-scenario {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.88rem;
+            color: var(--text-dim);
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dim);
+        }
+        .quiz-option:hover { border-color: var(--accent); background: var(--accent-light); }
+        .quiz-option.correct { border-color: var(--green); background: var(--green-light); color: var(--green); font-weight: 500; }
+        .quiz-option.incorrect { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: none;
+            line-height: 1.6;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: var(--green-light); color: var(--green); border: 1px solid var(--green); }
+        .quiz-feedback.incorrect-fb { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent); }
+
+        /* Second quiz */
+        .quiz-two { margin-top: 1.5rem; }
+
+        /* Reflection */
+        .reflection-card {
+            background: var(--purple-light);
+            border: 1px solid #ddd6fe;
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .reflection-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--purple);
+            margin-bottom: 0.75rem;
+        }
+        .reflection-card p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 0.75rem; }
+        .reflection-card p:last-child { margin-bottom: 0; }
+
+        /* Insight card */
+        .insight-card {
+            background: var(--blue-light);
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid var(--blue);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+        }
+        .insight-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 0.5rem;
+        }
+        .insight-card p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 0; }
+
+        /* References */
+        .references {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .references h4 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .references p {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            text-indent: -1.5rem;
+        }
+        .references a { color: var(--blue); text-decoration: none; }
+        .references a:hover { text-decoration: underline; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .stat-row { grid-template-columns: 1fr; }
+            .bias-flow { flex-direction: column; align-items: center; }
+            .flow-arrow { transform: rotate(90deg); }
+            .flow-step { max-width: 100%; }
+            .issue-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-label">Workshop 6 &middot; Assignment 6.2 &middot; AI Incidents &amp; Ethics</div>
+    <h1>AI Bias in Healthcare:<br>When Algorithms Inherit Inequality</h1>
+    <p>An interactive case study analyzing racial bias in a healthcare algorithm that affected 200 million patients — and what it teaches us about building ethical AI systems.</p>
+</header>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+    <div class="container">
+        <button class="tab-btn active" onclick="scrollTo('overview')">Overview</button>
+        <button class="tab-btn" onclick="scrollTo('mechanism')">How It Happened</button>
+        <button class="tab-btn" onclick="scrollTo('ethical-issues')">3 Ethical Issues</button>
+        <button class="tab-btn" onclick="scrollTo('covid')">COVID Amplification</button>
+        <button class="tab-btn" onclick="scrollTo('knowledge-check')">Knowledge Check</button>
+        <button class="tab-btn" onclick="scrollTo('reflection')">Reflection</button>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Section 1: Overview -->
+    <section class="section" id="overview">
+        <div class="section-label">The Incident</div>
+        <h2 class="section-title">Case Study Overview</h2>
+
+        <div class="summary-card">
+            <p>In 2019, researchers at UC Berkeley and Harvard published findings in <em>Science</em> revealing that a widely used healthcare algorithm, developed by Optum, exhibited <strong>significant racial bias</strong>. The algorithm used healthcare spending as a proxy for health need, but because Black patients historically had less access to care (and therefore lower spending), the system <strong>systematically underestimated their illness severity.</strong></p>
+            <p>Correcting this bias would have increased the proportion of Black patients flagged for additional care from <strong>17.7% to 46.5%</strong>.</p>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <div class="stat-value">200M</div>
+                <div class="stat-label">Patients affected annually</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">17.7%</div>
+                <div class="stat-label">Black patients flagged (biased)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">46.5%</div>
+                <div class="stat-label">Should have been flagged</div>
+            </div>
+        </div>
+
+        <p>Black patients at the <strong>97th percentile</strong> risk score had on average <strong>26% more chronic conditions</strong> than white patients at the same score, yet received equivalent or less follow-up care. The algorithm was not predicting illness — it was predicting cost.</p>
+    </section>
+
+    <!-- Section 2: How the Bias Worked -->
+    <section class="section" id="mechanism">
+        <div class="section-label">The Mechanism</div>
+        <h2 class="section-title">How the Bias Entered the System</h2>
+        <p>The algorithm's designers chose a seemingly rational target variable: <strong>healthcare spending</strong>. Higher spending should correlate with greater health need, right? But this assumption collapses when access to care is itself unequal.</p>
+
+        <div class="flow-container">
+            <div class="flow-title">The Bias Pipeline</div>
+            <div class="bias-flow">
+                <div class="flow-step">
+                    <div class="flow-icon">&#127973;</div>
+                    <div class="flow-name">Unequal Access</div>
+                    <div class="flow-desc">Black patients face systemic barriers to healthcare access</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-icon">&#128181;</div>
+                    <div class="flow-name">Lower Spending</div>
+                    <div class="flow-desc">Less access means less spending — even when sicker</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-icon">&#9881;&#65039;</div>
+                    <div class="flow-name">Algorithm Learns</div>
+                    <div class="flow-desc">Model equates low spending with low health need</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-icon">&#128683;</div>
+                    <div class="flow-name">Fewer Referrals</div>
+                    <div class="flow-desc">Black patients scored lower, denied care programs</div>
+                </div>
+            </div>
+            <div class="feedback-loop">&#8635; Feedback Loop: Fewer referrals &rarr; less care &rarr; less spending &rarr; even lower scores &rarr; even fewer referrals</div>
+        </div>
+
+        <p>The critical insight: <strong>the model was technically accurate</strong> — it correctly predicted who would spend more on healthcare. But predicting spending is not the same as predicting need. The algorithm encoded a century of structural inequality into a single risk score, then deployed it at scale.</p>
+    </section>
+
+    <!-- Section 3: Three Ethical Issues -->
+    <section class="section" id="ethical-issues">
+        <div class="section-label">Critical Analysis</div>
+        <h2 class="section-title">Three Ethical Issues</h2>
+        <p><strong>Click each issue</strong> to explore why it matters, the analysis of its implications, and a proposed solution.</p>
+
+        <div class="issue-tabs">
+            <button class="issue-tab active" onclick="showIssue(0)">1. Proxy Variables</button>
+            <button class="issue-tab" onclick="showIssue(1)">2. No Demographic Auditing</button>
+            <button class="issue-tab" onclick="showIssue(2)">3. Scale Amplification</button>
+        </div>
+
+        <!-- Issue 1 -->
+        <div class="issue-content active" id="issue-0">
+            <div class="issue-body">
+                <h4>Ethical Issue 1: Using Cost as a Proxy for Health Need</h4>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-why">Why This Matters</div>
+                    <p>This is the foundational flaw. The designers chose healthcare spending as the target variable, assuming higher spending correlates with greater health need. This assumption fails to account for systemic inequities in healthcare access that result in lower spending for Black patients even when they are sicker. It is a textbook example of how a seemingly neutral technical decision can encode structural racism.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-analysis">Analysis of Implications</div>
+                    <p>The choice of proxy variable meant the algorithm was not predicting illness — it was predicting cost, which is shaped by insurance coverage, geographic access to providers, historical discrimination in healthcare delivery, and individual ability to navigate the system.</p>
+                    <p>Because these factors disproportionately disadvantage Black patients, the algorithm effectively learned that Black patients are "healthier" than they actually are. This resulted in fewer Black patients being referred to care management programs, creating a feedback loop where reduced access led to reduced spending, which led to lower risk scores, which led to even less care.</p>
+                    <p>According to Obermeyer et al. (2019), <strong>Black patients at the 97th percentile risk score had 26% more chronic conditions than white patients at the same score</strong>, yet received equivalent or less follow-up care.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-solution">Proposed Solution</div>
+                    <p>Algorithm designers should use <strong>direct health outcome measures</strong> — number of chronic conditions, lab results, clinical severity indicators — rather than spending as the prediction target. When proxy variables are necessary, they should be validated against ground-truth health data across demographic groups before deployment, with mandatory disparate impact testing. The original researchers demonstrated that switching to a variable combining cost and health predictions <strong>reduced bias by 86%</strong> (Obermeyer et al., 2019).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Issue 2 -->
+        <div class="issue-content" id="issue-1">
+            <div class="issue-body">
+                <h4>Ethical Issue 2: Lack of Demographic Auditing Before Deployment</h4>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-why">Why This Matters</div>
+                    <p>The algorithm was deployed across major hospital systems affecting millions of patients <strong>without any published audit of its performance across racial groups</strong>. This reflects a broader industry pattern where models are evaluated on aggregate accuracy metrics without examining whether that accuracy is equitable across subpopulations.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-analysis">Analysis of Implications</div>
+                    <p>As Vyas et al. (2020) documented in their review of race correction in clinical algorithms, many widely used medical tools adjust their outputs based on race in ways that systematically direct fewer resources to minority patients.</p>
+                    <p>Aggregate metrics can mask dramatic inequities: <strong>a model that is 90% accurate overall might be 95% accurate for white patients and 70% accurate for Black patients.</strong> Without mandatory subgroup analysis, these gaps remain invisible until the harm is already done.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-solution">Proposed Solution</div>
+                    <p>Healthcare organizations deploying AI systems should require <strong>pre-deployment fairness audits</strong> that evaluate model performance stratified by race, ethnicity, gender, and socioeconomic status. These audits should be conducted by independent third parties and their results should be publicly accessible, following the model of FDA drug approval transparency.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Issue 3 -->
+        <div class="issue-content" id="issue-2">
+            <div class="issue-body">
+                <h4>Ethical Issue 3: Amplification of Systemic Inequity Through Scale</h4>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-why">Why This Matters</div>
+                    <p>What makes this incident particularly concerning is not just that bias existed, but that it was <strong>operationalized at massive scale</strong>. The Optum algorithm was used to guide care decisions for approximately 200 million patients annually. When bias is embedded in a system that operates at that scale, the harm is not incremental — it is systemic.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-analysis">Analysis of Implications</div>
+                    <p>Before algorithmic decision-making, biased care decisions were made by individual practitioners in individual settings — harmful, but localized. When the same biased logic is encoded in a centralized algorithm and deployed across thousands of hospitals, it <strong>standardizes and scales the inequity</strong>.</p>
+                    <p>As the ACLU (2021) noted, algorithms in healthcare may only worsen medical racism when deployed without adequate oversight. The combination of algorithmic bias and systemic deployment created conditions where structural racism operated at machine speed.</p>
+                </div>
+
+                <div class="issue-sub">
+                    <div class="issue-sub-label label-solution">Proposed Solution</div>
+                    <p>Organizations deploying AI at scale should implement <strong>continuous monitoring systems</strong> that track outcomes by demographic group in real time, not just at the point of initial validation. Regulatory frameworks should require impact assessments proportional to the scale of deployment — a tool affecting 200 million patients should face substantially more rigorous scrutiny than a pilot program.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: COVID Amplification -->
+    <section class="section" id="covid">
+        <div class="section-label">Compounding Crisis</div>
+        <h2 class="section-title">COVID-19: When Bias Meets a Pandemic</h2>
+        <p>The COVID-19 pandemic created a stress test for healthcare AI systems. The same algorithmic biases that were identified in the Optum study took on new urgency when AI-driven tools were deployed for triage, resource allocation, and vaccine prioritization during a crisis that <strong>already disproportionately affected communities of color.</strong></p>
+
+        <div class="covid-card">
+            <h4>The Amplification Effect</h4>
+            <p>During COVID-19, hospitals increasingly relied on algorithmic tools for triage, resource allocation, and care prioritization. If these tools inherit the same blind spots — evaluating aggregate performance without demographic stratification — they risk allocating <strong>ventilators, ICU beds, and vaccines</strong> in ways that deepen existing disparities.</p>
+            <p>AI-driven triage systems did not just reflect past bias — they actively shaped who received timely treatment during a crisis where <strong>timing was the difference between life and death.</strong></p>
+            <p>The combination of algorithmic bias and pandemic urgency created conditions where structural racism operated at machine speed, with consequences measured not in risk scores but in lives.</p>
+        </div>
+    </section>
+
+    <!-- Section 5: Knowledge Check -->
+    <section class="section" id="knowledge-check">
+        <div class="section-label">Test Your Understanding</div>
+        <h2 class="section-title">Knowledge Check</h2>
+        <p>Two scenarios to test whether the concepts from this case study have landed.</p>
+
+        <div class="quiz-wrapper">
+            <h4>Scenario 1: Aggregate vs. Equitable Accuracy</h4>
+            <div class="quiz-scenario">
+                A hospital deploys an AI risk prediction model. The vendor reports <strong>92% overall accuracy</strong> on their validation dataset. The hospital's leadership is satisfied and approves system-wide rollout. A junior data analyst asks whether accuracy was tested across demographic groups. The response: <em>"92% is 92%. The model works."</em>
+            </div>
+            <p>What is the most important next step?</p>
+            <div class="quiz-options" id="quiz1-options">
+                <div class="quiz-option" onclick="answerQuiz('quiz1', this, false)">A. Accept the 92% figure — it exceeds the industry benchmark.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz1', this, true)">B. Require a demographic breakdown of accuracy before rollout.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz1', this, false)">C. Remove race data from the model to prevent discrimination.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz1', this, false)">D. Add a disclaimer that the model may not be equally accurate for all groups.</div>
+            </div>
+            <div class="quiz-feedback" id="quiz1-feedback"></div>
+        </div>
+
+        <div class="quiz-wrapper quiz-two">
+            <h4>Scenario 2: The Proxy Variable Trap</h4>
+            <div class="quiz-scenario">
+                Your team builds a model to predict which patients need follow-up care. You use <strong>number of past doctor visits</strong> as a key input feature. A colleague points out that patients in rural areas visit doctors less frequently — not because they are healthier, but because the nearest clinic is 90 minutes away.
+            </div>
+            <p>What does this scenario illustrate?</p>
+            <div class="quiz-options" id="quiz2-options">
+                <div class="quiz-option" onclick="answerQuiz('quiz2', this, false)">A. A data quality issue — rural data should be excluded.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz2', this, false)">B. An overfitting problem — the model is too sensitive to visit frequency.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz2', this, true)">C. A proxy variable problem — visit frequency reflects access, not health need.</div>
+                <div class="quiz-option" onclick="answerQuiz('quiz2', this, false)">D. A labeling error — visit frequency should be a target, not an input.</div>
+            </div>
+            <div class="quiz-feedback" id="quiz2-feedback"></div>
+        </div>
+    </section>
+
+    <!-- Section 6: Reflection -->
+    <section class="section" id="reflection">
+        <div class="section-label">Critical Thinking</div>
+        <h2 class="section-title">How My Thinking Evolved</h2>
+
+        <div class="insight-card">
+            <h4>The Assumption That Changed</h4>
+            <p>When I began this analysis, my assumption was that AI bias in healthcare was primarily a <strong>data quality problem</strong> — that if you cleaned the data and removed obvious demographic variables, the algorithm would be fair. By the end, I understood that the bias was <strong>architectural</strong>. It was embedded in the choice of <em>what to predict</em>, not just the data used for prediction. A model can be technically accurate and statistically sound while still being deeply unjust if the target variable itself encodes inequality.</p>
+        </div>
+
+        <div class="reflection-card">
+            <h4>How This Shapes My Future Approach</h4>
+            <p>This analysis directly influences my approach to AI development in supply chain software. The predictive models I build are used for labor scheduling, demand forecasting, and resource allocation — all decisions that directly affect workers' livelihoods and communities' access to goods.</p>
+            <p>I will now question not just the accuracy of a model, but the <strong>equity of its target variable</strong>. Who benefits from the way we have defined "success" in our optimization? Whose needs are invisible in the data we have chosen to collect?</p>
+            <p>These are the questions that separate a technically competent AI practitioner from an <strong>ethical AI leader.</strong></p>
+        </div>
+
+        <div class="references">
+            <h4>References</h4>
+            <p>Obermeyer, Z., Powers, B., Vogeli, C., &amp; Mullainathan, S. (2019). Dissecting racial bias in an algorithm used to manage the health of populations. <em>Science, 366</em>(6464), 447&ndash;453. <a href="https://doi.org/10.1126/science.aax2342" target="_blank" rel="noopener">https://doi.org/10.1126/science.aax2342</a></p>
+            <p>Vyas, D. A., Eisenstein, L. G., &amp; Jones, D. S. (2020). Hidden in plain sight: Reconsidering the use of race correction in clinical algorithms. <em>New England Journal of Medicine, 383</em>(9), 874&ndash;882. <a href="https://doi.org/10.1056/NEJMms2004740" target="_blank" rel="noopener">https://doi.org/10.1056/NEJMms2004740</a></p>
+            <p>ACLU. (2021). Algorithms are making decisions about health care, which may only worsen medical racism. <a href="https://www.aclu.org/news/privacy-technology/algorithms-in-health-care-may-worsen-medical-racism" target="_blank" rel="noopener">https://www.aclu.org/news/privacy-technology/algorithms-in-health-care-may-worsen-medical-racism</a></p>
+        </div>
+    </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>Created by Narayana Murari &middot; Workshop 6, Assignment 6.2 &middot; AIML-501</p>
+    <p style="margin-top: 0.3rem;">AI tools (Claude) were used for research assistance and content refinement</p>
+    <p style="margin-top: 0.5rem;"><a href="../index.html">&larr; Back to Portfolio</a></p>
+</footer>
+
+<script>
+    // Issue tabs
+    function showIssue(index) {
+        document.querySelectorAll('.issue-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+        document.querySelectorAll('.issue-content').forEach((c, i) => c.classList.toggle('active', i === index));
+    }
+
+    // Quiz logic
+    const quizState = {};
+    const quizFeedback = {
+        quiz1: {
+            correct: 'Correct! A 92% overall accuracy can mask significant disparities. The Optum algorithm was also "accurate" — it correctly predicted spending. But accuracy for white patients was far higher than for Black patients. Demographic stratification is not optional; it is the only way to detect inequitable performance before it causes harm.',
+            incorrect: 'Not quite. The correct answer is B. A 92% overall accuracy can hide significant disparities — for example, 97% accuracy for one group and 75% for another. The Optum case proved that aggregate metrics are insufficient. Demographic stratification before rollout is the critical safeguard.'
+        },
+        quiz2: {
+            correct: 'Correct! This is exactly the proxy variable trap from the Optum case. Just as healthcare spending reflected access rather than need, doctor visit frequency reflects geographic access rather than health status. The variable is measuring the wrong thing — and the model will learn the wrong lesson from it.',
+            incorrect: 'Not quite. The correct answer is C. This is a proxy variable problem — visit frequency is being used as if it measures health need, but it actually measures geographic access to care. This is the same structural issue as the Optum case: choosing a variable that seems neutral but encodes systemic inequality.'
+        }
+    };
+
+    function answerQuiz(quizId, option, isCorrect) {
+        if (quizState[quizId]) return;
+        quizState[quizId] = true;
+
+        const options = document.querySelectorAll(`#${quizId}-options .quiz-option`);
+        options.forEach(o => o.style.pointerEvents = 'none');
+
+        const feedback = document.getElementById(`${quizId}-feedback`);
+        if (isCorrect) {
+            option.classList.add('correct');
+            feedback.className = 'quiz-feedback show correct-fb';
+            feedback.textContent = quizFeedback[quizId].correct;
+        } else {
+            option.classList.add('incorrect');
+            // Highlight correct
+            options.forEach(o => {
+                if ((quizId === 'quiz1' && o.textContent.includes('demographic breakdown')) ||
+                    (quizId === 'quiz2' && o.textContent.includes('proxy variable'))) {
+                    o.classList.add('correct');
+                }
+            });
+            feedback.className = 'quiz-feedback show incorrect-fb';
+            feedback.textContent = quizFeedback[quizId].incorrect;
+        }
+    }
+
+    // Scroll nav
+    function scrollTo(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const sectionIds = ['overview', 'mechanism', 'ethical-issues', 'covid', 'knowledge-check', 'reflection'];
+    window.addEventListener('scroll', () => {
+        const tabs = document.querySelectorAll('.tab-btn');
+        let activeIndex = 0;
+        sectionIds.forEach((id, i) => {
+            const el = document.getElementById(id);
+            if (el && el.getBoundingClientRect().top < 200) activeIndex = i;
+        });
+        tabs.forEach((t, i) => t.classList.toggle('active', i === activeIndex));
+    });
+</script>
+
+</body>
+</html>
