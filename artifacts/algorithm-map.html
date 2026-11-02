@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning Algorithm Map | Narayana Murari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--pg-bg:#fafaf9;--pg-card:#fff;--pg-accent-light:#fef3c7;--pg-blue:#2563eb;--pg-text:#1c1917;--pg-dim:#57534e;--pg-border:#e7e5e4;--pg-radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--pg-bg);color:var(--pg-text);line-height:1.65}
+.pg-hero{background:linear-gradient(135deg,#1c1917 0%,#292524 60%,#44403c 100%);color:#fff;padding:3.5rem 1.5rem 3rem}
+.pg-wrap{max-width:1240px;margin:0 auto}
+.pg-label{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--pg-accent-light);margin-bottom:.8rem}
+.pg-hero h1{font-family:'Poppins',sans-serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;margin-bottom:.8rem}
+.pg-hero p{max-width:720px;color:#e7e5e4;font-size:1.05rem}
+main{padding:2.5rem 1.5rem 1rem}
+.pg-box{background:var(--pg-card);border:1px solid var(--pg-border);border-radius:var(--pg-radius);padding:1.6rem 1.8rem;margin-bottom:1.5rem}
+.pg-box h2{font-family:'Poppins',sans-serif;font-size:1.25rem;margin-bottom:.6rem}
+.pg-box p{color:var(--pg-dim);margin-bottom:.7rem}
+.pg-box p:last-child{margin-bottom:0}
+.pg-map{border:1px solid var(--pg-border);border-radius:var(--pg-radius);overflow:hidden;margin-bottom:1.5rem;background:#f5f7fa}
+footer.pg-foot{border-top:1px solid var(--pg-border);padding:1.6rem 1.5rem 2.5rem;font-size:.92rem;color:var(--pg-dim)}
+footer.pg-foot a{color:var(--pg-blue);text-decoration:none}
+#map{--ink:#1b2430;--muted:#4b5563;--bg:#f5f7fa;--card:#ffffff;--line:#d9dee6;
+ --sup:#1d4ed8;--sup-bg:#e8efff;--uns:#b45309;--uns-bg:#fff0dd;}
+#map,#map *{box-sizing:border-box;margin:0;padding:0}
+#map{width:1600px;transform-origin:top left;background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans","DejaVu Sans",sans-serif;padding:56px 56px 40px}
+#map header h1{font-size:46px;line-height:1.1;letter-spacing:-0.5px}
+#map header .sub{margin-top:12px;font-size:20px;color:var(--muted)}
+#map .top{display:grid;grid-template-columns:1.05fr 1fr;gap:28px;margin-top:30px}
+#map .nest{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+#map .nest h2,#map .defs h2{font-size:18px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px}
+#map .lvl{border:2px solid;border-radius:14px;padding:30px 14px 14px 14px;position:relative}
+#map .lvl>span{position:absolute;top:7px;left:14px;font-weight:700;font-size:15px}
+#map .l1{border-color:#94a3b8;background:#f1f5f9}
+#map .l1>span{color:#334155}
+#map .l2{border-color:#64748b;background:#e6ecf3}
+#map .l2>span{color:#1e293b}
+#map .l3{border-color:#475569;background:#d9e2ec}
+#map .l3>span{color:#0f172a}
+#map .l4{border-color:#0f172a;background:#c6d3e1;padding-top:30px}
+#map .l4>span{color:#0f172a}
+#map .lvl .txt{font-size:14px;color:#334155;margin-top:2px}
+#map .defs{display:flex;flex-direction:column;gap:16px}
+#map .def{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;flex:1}
+#map .def.sup{border-left:10px solid var(--sup)}
+#map .def.uns{border-left:10px solid var(--uns)}
+#map .def h4{font-size:22px;margin-bottom:6px}
+#map .def.sup h4{color:var(--sup)}
+#map .def.uns h4{color:var(--uns)}
+#map .def p{font-size:19px;line-height:1.45}
+#map .def .ex{margin-top:10px;font-size:16px;color:var(--muted)}
+#map .def .ex b{color:var(--ink)}
+#map .part{margin-top:38px}
+#map .part h2{font-size:28px;margin-bottom:4px}
+#map .part .lead{font-size:19px;color:var(--muted);margin-bottom:16px}
+#map .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+#map .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px 18px;border-left:10px solid var(--line)}
+#map .card.sup{border-left-color:var(--sup)}
+#map .card.uns{border-left-color:var(--uns)}
+#map .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+#map .card h3{font-size:25px;line-height:1.2}
+#map .badge{font-size:15px;font-weight:700;padding:5px 12px;border-radius:999px;white-space:nowrap;border:1.5px solid}
+#map .badge.sup{color:var(--sup);background:var(--sup-bg);border-color:var(--sup)}
+#map .badge.uns{color:var(--uns);background:var(--uns-bg);border-color:var(--uns)}
+#map .chips{margin:10px 0 8px;display:flex;gap:8px;flex-wrap:wrap}
+#map .chip{font-size:14.5px;font-weight:600;color:#1f2937;background:#eef1f5;border:1px solid #cfd6df;padding:3px 10px;border-radius:6px}
+#map .card p{font-size:18px;line-height:1.45;margin-top:7px}
+#map .card p b{color:#111827}
+#map .card.note{background:#fbfcfe;border-left-color:#64748b;border-style:dashed;border-left-style:solid}
+#map .card.note h3{margin-bottom:8px}
+#map .card.note ul{padding-left:20px;font-size:18px;line-height:1.45}
+#map .card.note li{margin-bottom:8px}
+#map footer{margin-top:30px;font-size:15.5px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:14px}
+#map header .mt{font-size:46px;line-height:1.1;letter-spacing:-0.5px}
+</style>
+</head>
+<body>
+<header class="pg-hero"><div class="pg-wrap">
+<span class="pg-label">Workshop 1 &middot; Assignment 1.5 &middot; Algorithm Types</span>
+<h1>Machine Learning Algorithm Map</h1>
+<p>A one-page visual framework that sorts ten machine learning algorithms by learning type, application domain, and real-world use.</p>
+</div></header>
+<main><div class="pg-wrap">
+<div class="pg-box">
+<h2>Overview</h2>
+<p>Choosing an algorithm starts with two questions: what kind of data do I have, and what kind of answer do I need? This map answers them for ten widely used methods, five classic approaches for tabular data and five deep learning models for images, language, and content generation.</p>
+</div>
+<div class="pg-map" id="mapwrap"><div id="map"><header>
+ <h2 class="mt">Machine Learning Algorithm Map</h2>
+ <div class="sub">Ten algorithms by learning type, application domain, and real-world use &nbsp;|&nbsp; Narayana Murari Gowrishetty &nbsp;|&nbsp; Assignment 1.5 Portfolio: Algorithm Types</div>
+</header>
+<section class="top">
+ <div class="nest"><h2>Where these algorithms live</h2>
+  <div class="lvl l1"><span>Artificial Intelligence</span><div class="txt">Machines doing tasks that normally need human intelligence</div>
+   <div class="lvl l2" style="margin-top:10px"><span>Machine Learning</span><div class="txt">Learning patterns from data instead of hand-written rules</div>
+    <div class="lvl l3" style="margin-top:10px"><span>Deep Learning</span><div class="txt">Many-layered neural networks</div>
+     <div class="lvl l4" style="margin-top:10px"><span>Generative AI</span><div class="txt">Models that create new text, images, and more</div></div>
+    </div></div></div></div>
+ <div class="defs">
+  <div class="def sup"><h4>Supervised learning</h4><p>Learns from <b>labeled examples</b>, inputs paired with known answers, so it can predict the answer for new inputs.</p><p class="ex"><b>In this map:</b> Decision Tree, Random Forest, Gradient Boosting, CNN, BERT</p></div>
+  <div class="def uns"><h4>Unsupervised learning</h4><p>Finds structure in <b>unlabeled data</b>, such as natural groups, simpler views, or patterns it can reproduce.</p><p class="ex"><b>In this map:</b> K-means, PCA, GPT, Diffusion, GAN</p></div>
+ </div>
+</section>
+<section class="part"><h2>Part 1: Classic machine learning on tabular data</h2>
+ <div class="lead">Rows and columns, such as customer records, transactions, and measurements.</div>
+ <div class="grid"><div class="card sup">
+  <div class="card-top"><h3>Decision Tree</h3><span class="badge sup">Supervised</span></div>
+  <div class="chips"><span class="chip">Tabular Data</span></div>
+  <p><b>How it works.</b> Asks a chain of yes/no questions about the data, splitting it into purer and purer groups until each branch ends in a prediction.</p>
+  <p><b>Real-world use.</b> Approving or declining loan applications; rule-based medical triage.</p>
+</div><div class="card sup">
+  <div class="card-top"><h3>Random Forest</h3><span class="badge sup">Supervised</span></div>
+  <div class="chips"><span class="chip">Tabular Data</span></div>
+  <p><b>How it works.</b> Trains many decision trees on random samples of the data and takes a majority vote, so individual mistakes cancel out. An ensemble of Decision Trees.</p>
+  <p><b>Real-world use.</b> Credit card fraud detection; predicting which customers will cancel.</p>
+</div><div class="card sup">
+  <div class="card-top"><h3>Gradient Boosting (XGBoost)</h3><span class="badge sup">Supervised</span></div>
+  <div class="chips"><span class="chip">Tabular Data</span></div>
+  <p><b>How it works.</b> Builds trees one after another, each new tree correcting the errors the previous ones left behind. Often the most accurate on tables.</p>
+  <p><b>Real-world use.</b> Insurance risk scoring; demand forecasting; ranking search results.</p>
+</div><div class="card uns">
+  <div class="card-top"><h3>K-means Clustering</h3><span class="badge uns">Unsupervised</span></div>
+  <div class="chips"><span class="chip">Tabular Data</span></div>
+  <p><b>How it works.</b> Picks K centers, assigns every point to its nearest center, moves each center to the average of its points, and repeats until the groups settle.</p>
+  <p><b>Real-world use.</b> Customer segmentation for marketing; grouping similar products.</p>
+</div><div class="card uns">
+  <div class="card-top"><h3>Principal Component Analysis (PCA)</h3><span class="badge uns">Unsupervised</span></div>
+  <div class="chips"><span class="chip">Tabular Data</span><span class="chip">Computer Vision</span></div>
+  <p><b>How it works.</b> Finds the few directions along which the data varies most and rewrites it with fewer columns while keeping most of the information.</p>
+  <p><b>Real-world use.</b> Compressing high-dimensional data; plotting data in 2D; compressing face images.</p>
+</div><div class="card note">
+  <h3>How to choose</h3>
+  <ul>
+   <li><b>Known answers to learn from?</b> Use supervised methods: Decision Tree, Random Forest, Gradient Boosting.</li>
+   <li><b>No labels, looking for groups or simpler views?</b> Use unsupervised methods: K-means, PCA.</li>
+   <li><b>The tree family:</b> one tree is easy to read, a forest is steadier, and boosting is usually the most accurate.</li>
+  </ul></div></div></section>
+<section class="part"><h2>Part 2: Deep learning for vision, language, and generative AI</h2>
+ <div class="lead">Images, text, and models that create new content.</div>
+ <div class="grid"><div class="card sup">
+  <div class="card-top"><h3>Convolutional Neural Network (CNN)</h3><span class="badge sup">Supervised</span></div>
+  <div class="chips"><span class="chip">Computer Vision</span></div>
+  <p><b>How it works.</b> Slides small filters across an image to detect edges, then shapes, then whole objects, one layer at a time.</p>
+  <p><b>Real-world use.</b> Reading medical scans; spotting defects on factory lines; object detection for self-driving cars.</p>
+</div><div class="card sup">
+  <div class="card-top"><h3>BERT</h3><span class="badge sup">Supervised (fine-tuned)</span></div>
+  <div class="chips"><span class="chip">NLP</span></div>
+  <p><b>How it works.</b> A Transformer that reads text in both directions at once to grasp meaning in context. Pre-trained on huge text, then fine-tuned on labeled examples.</p>
+  <p><b>Real-world use.</b> Sentiment analysis of reviews; search relevance; sorting support tickets.</p>
+</div><div class="card uns">
+  <div class="card-top"><h3>GPT (Large Language Model)</h3><span class="badge uns">Unsupervised (self-supervised)</span></div>
+  <div class="chips"><span class="chip">NLP</span><span class="chip">Generative AI</span></div>
+  <p><b>How it works.</b> A Transformer trained to predict the next word across massive amounts of text, which teaches it to write, summarize, and answer questions.</p>
+  <p><b>Real-world use.</b> Chat assistants; code generation; document summarization.</p>
+</div><div class="card uns">
+  <div class="card-top"><h3>Diffusion Model (Stable Diffusion)</h3><span class="badge uns">Unsupervised (self-supervised)</span></div>
+  <div class="chips"><span class="chip">Generative AI</span><span class="chip">Computer Vision</span></div>
+  <p><b>How it works.</b> Learns to remove noise step by step. To create an image, it starts from pure noise and denoises it toward a text prompt.</p>
+  <p><b>Real-world use.</b> Text-to-image art; product mockups; photo editing.</p>
+</div><div class="card uns">
+  <div class="card-top"><h3>Generative Adversarial Network (GAN)</h3><span class="badge uns">Unsupervised</span></div>
+  <div class="chips"><span class="chip">Generative AI</span><span class="chip">Computer Vision</span></div>
+  <p><b>How it works.</b> A generator makes fakes while a discriminator tries to catch them. Competing pushes both to improve until the fakes look real.</p>
+  <p><b>Real-world use.</b> Synthetic faces; extra training data when real data is scarce; image upscaling.</p>
+</div><div class="card note">
+  <h3>How these relate</h3>
+  <ul>
+   <li><b>BERT and GPT are both Transformers.</b> BERT reads and understands text, while GPT generates it.</li>
+   <li><b>GANs and diffusion models both create images.</b> GANs pit two networks against each other, while diffusion denoises step by step and is more stable to train.</li>
+   <li><b>All five rely on deep neural networks</b> trained on large amounts of data.</li>
+  </ul></div></div></section>
+<footer>Blue = supervised, orange = unsupervised (each card also states its type in words). Self-supervised learning, used by GPT and by the denoising step of diffusion models, is a form of unsupervised learning in which the data supplies its own labels, such as the next word in a sentence. BERT is pre-trained this way and then fine-tuned with labeled examples, so it is listed as supervised.</footer></div></div>
+<div class="pg-box">
+<h2>Reflection</h2>
+<p>Building this map moved me from knowing algorithms by name to understanding how to choose among them. The biggest lesson was that the first question is not which algorithm is best, but what kind of data and what kind of answer I have. Labeled tabular data points toward supervised methods such as decision trees, random forests, and gradient boosting, while unlabeled data calls for clustering or PCA. For images, language, and content creation, deep learning families such as CNNs, Transformers, GANs, and diffusion models take over.</p>
+<p>The relationships helped me most. Random forests and gradient boosting are both built from decision trees, which connects directly to the decision tree I described in Assignment 1.4. BERT and GPT share the Transformer design but serve different purposes. The hardest labeling decision was GPT, because it learns from text without human labels. I classified it as self-supervised, which is a form of unsupervised learning.</p>
+<p>As a software engineer, I use LLMs every day, so seeing where they fit among other algorithms gives me a clearer sense of when a simpler model is the better tool.</p>
+</div>
+</div></main>
+<footer class="pg-foot"><div class="pg-wrap">
+<p>Created by Narayana Murari &middot; Workshop 1, Assignment 1.5</p>
+<p>AI tools (Claude) were used for research assistance and content refinement.</p>
+<p style="margin-top:.5rem;"><a href="../index.html">&larr; Back to Portfolio</a></p>
+</div></footer>
+<script>
+(function(){var w=document.getElementById('mapwrap'),m=document.getElementById('map');function f(){var s=Math.min(1,w.clientWidth/1600);m.style.transform='scale('+s+')';w.style.height=(m.offsetHeight*s)+'px';}addEventListener('resize',f);addEventListener('load',f);f();})();
+</script>
+</body>
+</html>
